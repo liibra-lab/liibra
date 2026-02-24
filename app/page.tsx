@@ -23,7 +23,7 @@ export default function Home() {
           marginBottom: "1rem",
         }}
       >
-        Legal Institute of Brazil
+        Legal Information Institute of Brazil
       </h1>
 
       <p
@@ -34,8 +34,7 @@ export default function Home() {
           opacity: 0.65,
         }}
       >
-        A modern, open-access platform for Brazilian legal information — inspired
-        by the clarity and mission of the Cornell Legal Information Institute.
+        A modern, open-access platform inspired by the clarity and mission of the Cornell Legal Information Institute.
       </p>
     </main>
   );
