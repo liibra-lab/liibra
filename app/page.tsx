@@ -23,7 +23,7 @@ export default function Home() {
           marginBottom: "1rem",
         }}
       >
-        Legal Information Institute of Brazil
+        LiiBRA
       </h1>
 
       <p
@@ -34,7 +34,7 @@ export default function Home() {
           opacity: 0.65,
         }}
       >
-        A modern, open-access platform inspired by the clarity and mission of the Cornell Legal Information Institute.
+        The Legal Information Institute of Brazil is a modern and open-access platform inspired to clarity.
       </p>
     </main>
   );
