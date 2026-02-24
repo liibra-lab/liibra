@@ -1,22 +1,20 @@
-import type { Metadata } from "next";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "Liibra",
-  description: "Legal Information Institute of Brazil",
-};
-
-
+import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-export default function RootLayout({ children }) {
+export const metadata = {
+  title: "LiiBRA",
+  description: "Open-access legal information platform of Brazil",
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
         {children}
         <Analytics />
-	<SpeedInsights />
+        <SpeedInsights />
       </body>
     </html>
   );
