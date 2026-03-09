@@ -17,26 +17,26 @@ export default function Home() {
     >
       <h1
         style={{
-          fontSize: "3.8rem",
+          fontSize: "3.6rem",
           fontWeight: 600,
           letterSpacing: "-0.03em",
           marginBottom: "1rem",
         }}
       >
-        LiiBRA
+        Liibra Consulting
       </h1>
 
       <p
         style={{
           fontSize: "1.25rem",
-          maxWidth: "620px",
+          maxWidth: "640px",
           lineHeight: 1.55,
           opacity: 0.65,
         }}
       >
-        The Legal Information Institute of Brazil is a modern and open-access platform inspired to clarity.
+        Liibra Consulting helps organizations design clear strategies, modular systems,
+        and decision frameworks built for long‑term independence.
       </p>
     </main>
   );
 }
-
