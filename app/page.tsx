@@ -128,15 +128,14 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Decorative rule */}
-        <div className="absolute right-8 md:right-16 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-3 text-stone-600">
-          <div className="w-px h-24 bg-stone-700" />
-          <span className="text-[14px] tracking-[0.3em] uppercase rotate-90 whitespace-nowrap">
+      {/* Decorative rule */}
+        <div className="absolute right-8 md:right-16 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-6 text-stone-600">
+          <div className="w-px h-16 bg-stone-700" />
+          <span className="text-[10px] tracking-[0.3em] uppercase rotate-90 whitespace-nowrap leading-none">
             Est. 2021
           </span>
-          <div className="w-px h-24 bg-stone-700" />
+          <div className="w-px h-16 bg-stone-700" />
         </div>
-      </section>
 
       {/* SERVICES */}
       <section id="services" className="px-8 md:px-16 lg:px-24 py-28">
