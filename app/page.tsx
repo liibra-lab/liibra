@@ -127,8 +127,8 @@ export default function Home() {
             </a>
           </div>
         </div>
+      </section>
 
-      
       {/* SERVICES */}
       <section id="services" className="px-8 md:px-16 lg:px-24 py-28">
         <div className="max-w-5xl mx-auto">
