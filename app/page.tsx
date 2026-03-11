@@ -128,16 +128,7 @@ export default function Home() {
           </div>
         </div>
 
-           {/* Decorative rule */}
-        <div className="absolute right-8 md:right-16 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-6 text-stone-600">
-          <div className="w-px h-16 bg-stone-700" />
-          <span className="text-[10px] tracking-[0.3em] uppercase rotate-90 whitespace-nowrap leading-none">
-            Est. 2021
-          </span>
-          <div className="w-px h-16 bg-stone-700" />
-        </div>
-
-
+      
       {/* SERVICES */}
       <section id="services" className="px-8 md:px-16 lg:px-24 py-28">
         <div className="max-w-5xl mx-auto">
@@ -201,7 +192,7 @@ export default function Home() {
       {/* FOOTER */}
       <footer className="px-8 md:px-16 lg:px-24 py-8 border-t border-stone-800">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <span className="text-xs tracking-[0.18em] uppercase text-stone-600">Liibra</span>
+          <span className="text-xs tracking-[0.18em] uppercase text-stone-600">Est. 2021</span>
           <div className="flex items-center gap-6 text-xs tracking-widest uppercase text-stone-600">
             <a href="#services" className="hover:text-stone-400 transition-colors">Services</a>
             <a href="#insights" className="hover:text-stone-400 transition-colors">Insights</a>
