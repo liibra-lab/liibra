@@ -1,6 +1,28 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Share_Tech_Mono, UnifrakturMaguntia, VT323 } from "next/font/google";
+
+const shareTechMono = Share_Tech_Mono({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-share-tech-mono",
+  display: "swap",
+});
+
+const unifrakturMaguntia = UnifrakturMaguntia({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-unifraktur",
+  display: "swap",
+});
+
+const vt323 = VT323({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-vt323",
+  display: "swap",
+});
 
 export default function DarkPage() {
   const curRef = useRef<HTMLDivElement>(null);
@@ -50,8 +72,6 @@ export default function DarkPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=UnifrakturMaguntia&family=VT323&display=swap');
-
         :root {
           --red:   #cc0000;
           --dred:  #880000;
@@ -63,7 +83,7 @@ export default function DarkPage() {
         .dark-page {
           background: var(--black);
           color: var(--bone);
-          font-family: 'Share Tech Mono', monospace;
+          font-family: var(--font-share-tech-mono), monospace;
           min-height: 100vh;
           min-height: 100dvh;
           display: flex;
@@ -170,7 +190,7 @@ export default function DarkPage() {
 
         /* title */
         .dp-title {
-          font-family: 'UnifrakturMaguntia', cursive;
+          font-family: var(--font-unifraktur), cursive;
           font-size: clamp(3.8rem, 16vw, 8rem);
           color: var(--bone);
           line-height: .85;
@@ -184,7 +204,7 @@ export default function DarkPage() {
           content: 'DARK';
           position: absolute;
           bottom: -.12em; right: -.04em;
-          font-family: 'VT323', monospace;
+          font-family: var(--font-vt323), monospace;
           font-size: .27em;
           color: var(--red);
           letter-spacing: .4em;
@@ -230,16 +250,17 @@ export default function DarkPage() {
           animation: dp-show .1s steps(1) 2.5s forwards;
         }
         .dp-btn {
-          font-family: 'Share Tech Mono', monospace;
+          font-family: var(--font-share-tech-mono), monospace;
           font-size: clamp(.68rem, 2vw, .75rem);
           letter-spacing: .12em;
           text-transform: uppercase;
           padding: 12px 28px;
           border: 1px solid;
           cursor: none;
-          text-decoration: none;
           display: inline-block;
-          -webkit-tap-highlight-color: transparent;
+          background: none;
+          appearance: none;
+          -webkit-appearance: none;
         }
         .dp-btn-enter {
           background: var(--red);
@@ -293,7 +314,7 @@ export default function DarkPage() {
         @keyframes dp-typeIn { from{width:0; opacity:1} to{width:100%; opacity:1} }
       `}</style>
 
-      <div className="dark-page">
+      <div className={`dark-page ${shareTechMono.variable} ${unifrakturMaguntia.variable} ${vt323.variable}`}>
         {!isMobile && <div ref={curRef} className="dp-cur" />}
         <div className="dp-noise" />
 
@@ -319,8 +340,8 @@ export default function DarkPage() {
             </p>
 
             <div className="dp-cta">
-              <a href="#" className="dp-btn dp-btn-enter">Entrar no jogo</a>
-              <a href="#" className="dp-btn dp-btn-lore">[ ler a lore ]</a>
+              <button type="button" className="dp-btn dp-btn-enter">Entrar no jogo</button>
+              <button type="button" className="dp-btn dp-btn-lore">[ ler a lore ]</button>
             </div>
           </main>
 
@@ -335,4 +356,3 @@ export default function DarkPage() {
     </>
   );
 }
-
