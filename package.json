@@ -8,23 +8,29 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:cf": "next build && npx @cloudflare/next-on-pages",
+    "preview": "npm run build:cf && wrangler pages dev .vercel/output/static",
+    "deploy": "wrangler pages deploy .vercel/output/static",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "next": "16.2.9",
+    "next": "15.5.19",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "15.5.19",
+    "eslint-plugin-next-on-pages": "^1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4"
   }
 }
 
