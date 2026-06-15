@@ -1,0 +1,5 @@
+# Liibra vulnerability disclosure — https://liibra.com.br
+Contact: mailto:security@liibra.com.br
+Expires: 2027-06-15T00:00:00Z
+Preferred-Languages: pt-BR, en
+Canonical: https://liibra.com.br/.well-known/security.txt
