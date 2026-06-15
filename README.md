@@ -1,4 +1,9 @@
-# Liibra
+█╗     ██╗██╗██████╗  █████╗    ████╗
+██║     ██║██║██╔══██╗██╔══██╗ ██ ╔═██╗
+██║     ██║██║██████╔╝██████╔╝ ███████║
+██║     ██║██║██╔══██╗██╔══██╗ ██╔═╗██║
+███████╗██║██║███████║██║  ██║ ██║ ║██║
+╚══════╝╚═╝╚═╝╚══════╝╚═╝  ╚═╝ ╚═╝  ╚═╝
 
 A [SvelteKit](https://svelte.dev/docs/kit) app deployed to
 [Cloudflare Workers](https://developers.cloudflare.com/workers/) via
