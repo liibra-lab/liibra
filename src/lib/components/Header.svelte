@@ -1,0 +1,28 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+	import type { Messages } from '$lib/i18n';
+	import type { Locale } from '$lib/i18n/locales';
+	import SearchBox from './SearchBox.svelte';
+	import LangToggle from './LangToggle.svelte';
+
+	let {
+		m,
+		locale,
+		redirectTo,
+		query = ''
+	}: { m: Messages; locale: Locale; redirectTo: string; query?: string } = $props();
+</script>
+
+<header class="border-b border-liibra-rule bg-white">
+	<div class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
+		<a href={resolve('/')} class="font-serif text-2xl font-bold tracking-tight text-liibra-ink no-underline hover:no-underline">
+			{m.brand}
+		</a>
+		<div class="order-3 w-full sm:order-2 sm:w-auto sm:flex-1">
+			<SearchBox {m} value={query} />
+		</div>
+		<div class="order-2 sm:order-3">
+			<LangToggle {m} {locale} {redirectTo} />
+		</div>
+	</div>
+</header>

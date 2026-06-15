@@ -11,7 +11,9 @@
 		"check": "wrangler types --check && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"gen": "wrangler types",
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"predeploy": "wrangler whoami",
+		"deploy": "wrangler deploy"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
