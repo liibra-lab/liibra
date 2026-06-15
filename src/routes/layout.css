@@ -1,1 +1,50 @@
 @import 'tailwindcss';
+
+/* Design tokens — a Cornell LII–inspired, typography-first palette. Tailwind v4
+   generates utilities from these (font-serif, text-liibra-link, border-liibra-rule, …). */
+@theme {
+	--font-serif: Georgia, 'Times New Roman', serif;
+	--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+	--color-liibra-link: #1a5fb4;
+	--color-liibra-link-visited: #6a3fa0;
+	--color-liibra-ink: #1a1a1a;
+	--color-liibra-muted: #5a5a5a;
+	--color-liibra-rule: #e2e2e2;
+	--color-liibra-bg: #ffffff;
+	--color-liibra-surface: #f7f6f3;
+}
+
+@layer base {
+	html {
+		background-color: var(--color-liibra-bg);
+		color: var(--color-liibra-ink);
+		font-family: var(--font-sans);
+		-webkit-text-size-adjust: 100%;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--font-serif);
+		color: var(--color-liibra-ink);
+	}
+
+	a {
+		color: var(--color-liibra-link);
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+	a:visited {
+		color: var(--color-liibra-link-visited);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-liibra-link);
+		outline-offset: 2px;
+	}
+}
