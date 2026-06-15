@@ -42,6 +42,11 @@ npm run deploy       # wrangler deploy
 Deployment requires Cloudflare credentials (`CLOUDFLARE_API_TOKEN` /
 `CLOUDFLARE_ACCOUNT_ID`) configured in the environment — never commit them.
 
+Cloudflare Workers is the **only** deployment target. The build emits a Worker
+bundle (`.svelte-kit/cloudflare/_worker.js`), not a long-running Node server, so
+do not connect other host integrations (e.g. Railway, Render, Fly) — they cannot
+run a Worker bundle and will report failed deployments.
+
 ## Project layout
 
 - `src/routes/` — pages and layouts
