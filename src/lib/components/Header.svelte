@@ -18,6 +18,9 @@
 		<a href={resolve('/')} class="font-serif text-2xl font-bold tracking-tight text-liibra-ink no-underline hover:no-underline">
 			{m.brand}
 		</a>
+		<nav aria-label={m.nav_proposicoes} class="order-1 text-sm sm:order-2">
+			<a href={resolve('/proposicoes')}>{m.nav_proposicoes}</a>
+		</nav>
 		<div class="order-3 w-full sm:order-2 sm:w-auto sm:flex-1">
 			<SearchBox {m} value={query} />
 		</div>

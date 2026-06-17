@@ -7,6 +7,7 @@ export interface Messages {
 	brand: string;
 	tagline: string;
 	nav_home: string;
+	nav_proposicoes: string;
 	search_label: string;
 	search_placeholder: string;
 	search_submit: string;
@@ -36,12 +37,39 @@ export interface Messages {
 	type_lei: string;
 	type_decreto: string;
 	type_codigo: string;
+	prop_browse_title: string;
+	prop_browse_subtitle: string;
+	prop_search_placeholder: string;
+	prop_filter_type: string;
+	prop_filter_year: string;
+	prop_filter_apply: string;
+	prop_filter_all_types: string;
+	prop_no_results: string;
+	prop_source_unavailable: string;
+	prop_ementa: string;
+	prop_ementa_detalhada: string;
+	prop_authors: string;
+	prop_status: string;
+	prop_status_organ: string;
+	prop_presented_on: string;
+	prop_keywords: string;
+	prop_provenance_title: string;
+	prop_official_page: string;
+	prop_full_text: string;
+	prop_verify_api: string;
+	prop_last_updated: string;
+	prop_data_source: string;
+	prop_not_found_title: string;
+	prop_not_found_body: string;
+	prev_page: string;
+	next_page: string;
 }
 
 const pt: Messages = {
 	brand: 'Liibra',
 	tagline: 'Informação jurídica brasileira, aberta e acessível',
 	nav_home: 'Início',
+	nav_proposicoes: 'Proposições',
 	search_label: 'Buscar na legislação',
 	search_placeholder: 'Busque por lei, código ou termo…',
 	search_submit: 'Buscar',
@@ -71,13 +99,42 @@ const pt: Messages = {
 	type_constituicao: 'Constituição',
 	type_lei: 'Lei',
 	type_decreto: 'Decreto',
-	type_codigo: 'Código'
+	type_codigo: 'Código',
+	prop_browse_title: 'Proposições legislativas',
+	prop_browse_subtitle:
+		'Projetos de lei e demais proposições, direto da API de Dados Abertos da Câmara dos Deputados.',
+	prop_search_placeholder: 'Busque por palavra-chave…',
+	prop_filter_type: 'Tipo',
+	prop_filter_year: 'Ano',
+	prop_filter_apply: 'Filtrar',
+	prop_filter_all_types: 'Todos os tipos',
+	prop_no_results: 'Nenhuma proposição encontrada para estes filtros.',
+	prop_source_unavailable:
+		'Não foi possível contatar a API da Câmara dos Deputados. Tente novamente em instantes.',
+	prop_ementa: 'Ementa',
+	prop_ementa_detalhada: 'Ementa detalhada',
+	prop_authors: 'Autoria',
+	prop_status: 'Situação',
+	prop_status_organ: 'Órgão',
+	prop_presented_on: 'Apresentada em',
+	prop_keywords: 'Palavras-chave',
+	prop_provenance_title: 'Fonte e verificação',
+	prop_official_page: 'Ficha de tramitação oficial',
+	prop_full_text: 'Inteiro teor (texto completo)',
+	prop_verify_api: 'Dados brutos na API',
+	prop_last_updated: 'Última atualização',
+	prop_data_source: 'Dados: Dados Abertos da Câmara dos Deputados',
+	prop_not_found_title: 'Proposição não encontrada',
+	prop_not_found_body: 'Não foi possível localizar a proposição solicitada.',
+	prev_page: 'Anterior',
+	next_page: 'Próxima'
 };
 
 const en: Messages = {
 	brand: 'Liibra',
 	tagline: 'Brazilian legal information, open and accessible',
 	nav_home: 'Home',
+	nav_proposicoes: 'Bills',
 	search_label: 'Search the legislation',
 	search_placeholder: 'Search for a law, code or term…',
 	search_submit: 'Search',
@@ -107,7 +164,35 @@ const en: Messages = {
 	type_constituicao: 'Constitution',
 	type_lei: 'Law',
 	type_decreto: 'Decree',
-	type_codigo: 'Code'
+	type_codigo: 'Code',
+	prop_browse_title: 'Legislative bills',
+	prop_browse_subtitle:
+		'Bills and other propositions, straight from the Chamber of Deputies Open Data API.',
+	prop_search_placeholder: 'Search by keyword…',
+	prop_filter_type: 'Type',
+	prop_filter_year: 'Year',
+	prop_filter_apply: 'Filter',
+	prop_filter_all_types: 'All types',
+	prop_no_results: 'No bills found for these filters.',
+	prop_source_unavailable:
+		'Could not reach the Chamber of Deputies API. Please try again shortly.',
+	prop_ementa: 'Summary',
+	prop_ementa_detalhada: 'Detailed summary',
+	prop_authors: 'Authorship',
+	prop_status: 'Status',
+	prop_status_organ: 'Body',
+	prop_presented_on: 'Presented on',
+	prop_keywords: 'Keywords',
+	prop_provenance_title: 'Source & verification',
+	prop_official_page: 'Official tracking page',
+	prop_full_text: 'Full text (inteiro teor)',
+	prop_verify_api: 'Raw data on the API',
+	prop_last_updated: 'Last updated',
+	prop_data_source: 'Data: Open Data, Brazilian Chamber of Deputies',
+	prop_not_found_title: 'Bill not found',
+	prop_not_found_body: 'The requested bill could not be located.',
+	prev_page: 'Previous',
+	next_page: 'Next'
 };
 
 export const messages: Record<Locale, Messages> = { pt, en };

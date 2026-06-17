@@ -41,4 +41,22 @@ export function formatDate(locale: Locale, iso: string): string {
 	}).format(date);
 }
 
+/**
+ * Format a date or date-time string from the Câmara API (e.g. "2024-03-01" or
+ * "2024-03-01T14:00") for display in the active locale. Returns the raw input
+ * if it cannot be parsed, so we never show a fabricated value.
+ */
+export function formatDateTime(locale: Locale, value: string | null | undefined): string {
+	if (!value) return '';
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return value;
+	const hasTime = value.includes('T');
+	return new Intl.DateTimeFormat(locale === 'pt' ? 'pt-BR' : 'en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		...(hasTime ? { hour: '2-digit', minute: '2-digit' } : {})
+	}).format(date);
+}
+
 export type { Messages };
