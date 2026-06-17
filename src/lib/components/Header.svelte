@@ -4,6 +4,7 @@
 	import type { Locale } from '$lib/i18n/locales';
 	import SearchBox from './SearchBox.svelte';
 	import LangToggle from './LangToggle.svelte';
+	import liibraMark from '$lib/assets/liibra-mark.svg';
 
 	let {
 		m,
@@ -15,7 +16,8 @@
 
 <header class="border-b border-liibra-rule bg-white">
 	<div class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
-		<a href={resolve('/')} class="font-serif text-2xl font-bold tracking-tight text-liibra-ink no-underline hover:no-underline">
+		<a href={resolve('/')} class="flex items-center gap-2 font-serif text-2xl font-bold tracking-tight text-liibra-ink no-underline hover:no-underline">
+			<img src={liibraMark} alt="" class="h-8 w-auto" />
 			{m.brand}
 		</a>
 		<nav aria-label={m.nav_proposicoes} class="order-1 text-sm sm:order-2">
