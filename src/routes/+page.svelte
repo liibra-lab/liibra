@@ -46,3 +46,11 @@
 		{/each}
 	</ul>
 </section>
+
+<section class="mt-10 border-t border-liibra-rule pt-8">
+	<h2 class="text-2xl">{m.prop_browse_title}</h2>
+	<p class="mt-2 max-w-2xl text-liibra-muted">{m.prop_browse_subtitle}</p>
+	<p class="mt-3">
+		<a href={resolve('/proposicoes')} class="font-medium">{m.nav_proposicoes} →</a>
+	</p>
+</section>
