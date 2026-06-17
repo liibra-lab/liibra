@@ -11,8 +11,21 @@ export const handle: Handle = async ({ event, resolve }) => {
 	);
 	event.locals.locale = locale;
 
-	return resolve(event, {
+	const response = await resolve(event, {
 		// Rewrite the static `lang="en"` in app.html to the resolved locale.
 		transformPageChunk: ({ html }) => html.replace('lang="en"', `lang="${locale}"`)
 	});
+
+	// Baseline security headers (applied to all SvelteKit-handled responses).
+	// TODO: Add a tested Content-Security-Policy after validating SvelteKit hydration and Cloudflare Web Analytics.
+	response.headers.set('X-Frame-Options', 'DENY');
+	response.headers.set('X-Content-Type-Options', 'nosniff');
+	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+	response.headers.set(
+		'Permissions-Policy',
+		'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()'
+	);
+	response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+
+	return response;
 };
