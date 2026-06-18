@@ -11,6 +11,7 @@
 		"check": "wrangler types --check && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"gen": "wrangler types",
+		"gen:constituicao": "node --experimental-strip-types scripts/fetch-constituicao-planalto.ts",
 		"test": "node --experimental-strip-types --import ./tests/register-ts.mjs --test 'tests/**/*.test.ts'",
 		"lint": "eslint .",
 		"predeploy": "wrangler whoami",
