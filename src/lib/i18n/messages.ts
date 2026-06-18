@@ -31,6 +31,7 @@ export interface Messages {
 	lang_en: string;
 	skip_to_content: string;
 	footer_attribution: string;
+	doc_partial_notice: string;
 	not_found_title: string;
 	not_found_body: string;
 	type_constituicao: string;
@@ -127,6 +128,8 @@ const pt: Messages = {
 	skip_to_content: 'Pular para o conteúdo',
 	footer_attribution:
 		'Conteúdo jurídico proveniente do LexML Brasil. Liibra é um projeto independente.',
+	doc_partial_notice:
+		'Este documento contém trechos parciais. Consulte a fonte oficial para o texto completo.',
 	not_found_title: 'Documento não encontrado',
 	not_found_body: 'Não foi possível localizar o documento solicitado.',
 	type_constituicao: 'Constituição',
@@ -223,6 +226,8 @@ const en: Messages = {
 	skip_to_content: 'Skip to content',
 	footer_attribution:
 		'Legal content sourced from LexML Brasil. Liibra is an independent project.',
+	doc_partial_notice:
+		'This document contains partial excerpts. See the official source for the complete text.',
 	not_found_title: 'Document not found',
 	not_found_body: 'The requested document could not be located.',
 	type_constituicao: 'Constitution',

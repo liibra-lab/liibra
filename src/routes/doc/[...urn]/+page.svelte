@@ -42,6 +42,15 @@
 			</div>
 		</header>
 
+		{#if doc.coverage === 'partial'}
+			<p
+				role="note"
+				class="mt-6 rounded-md border border-liibra-rule bg-liibra-surface px-4 py-3 text-sm text-liibra-muted"
+			>
+				{m.doc_partial_notice}
+			</p>
+		{/if}
+
 		<div class="mt-8">
 			<ArticleList articles={doc.articles} {m} />
 		</div>

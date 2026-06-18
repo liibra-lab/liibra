@@ -18,6 +18,7 @@ export const seedDocuments: LegalDocument[] = [
 		urn: constituicaoUrn,
 		type: 'constituicao',
 		jurisdiction: 'br:federal',
+		coverage: 'partial',
 		date: '1988-10-05',
 		number: '1988',
 		title: {
@@ -51,6 +52,7 @@ export const seedDocuments: LegalDocument[] = [
 		urn: codigoCivilUrn,
 		type: 'codigo',
 		jurisdiction: 'br:federal',
+		coverage: 'partial',
 		date: '2002-01-10',
 		number: '10.406',
 		title: {
@@ -89,6 +91,7 @@ export const seedDocuments: LegalDocument[] = [
 		urn: cdcUrn,
 		type: 'lei',
 		jurisdiction: 'br:federal',
+		coverage: 'partial',
 		date: '1990-09-11',
 		number: '8.078',
 		title: {
