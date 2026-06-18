@@ -1,11 +1,19 @@
 // Seeded dataset of real Brazilian federal legislation.
 //
-// NOTE: article texts are FAITHFUL but PARTIAL excerpts — only a handful of
-// articles per law are included for this first slice. URNs and source links are
-// the genuine LexML identifiers. When the live LexML SRU source is wired in,
-// this module is no longer the source of truth (see ./index.ts).
+// The Constituição Federal carries its FULL permanent text (arts. 1–250,
+// including amendment-inserted articles such as 103-A), loaded from
+// ./data/constituicao-1988.json. That text was transcribed by the ABJur
+// "constituicao" project (https://github.com/abjur/constituicao,
+// CONSTITUICAO.md) and reflects amendments up to its snapshot (circa 2022,
+// i.e. before EC 132/2023); the ADCT is not included here. The canonical
+// `source.url` still points to the LexML record.
+//
+// The other documents' article texts remain FAITHFUL but PARTIAL excerpts.
+// When the live LexML SRU source is wired in, this module is no longer the
+// source of truth (see ./index.ts).
 
-import type { LegalDocument } from './types';
+import type { Article, LegalDocument } from './types';
+import constituicaoArticles from './data/constituicao-1988.json';
 
 const lexmlUrl = (urn: string) => `https://www.lexml.gov.br/urn/${urn}`;
 
@@ -29,22 +37,7 @@ export const seedDocuments: LegalDocument[] = [
 			pt: 'A lei fundamental e suprema do Brasil, que organiza o Estado e garante os direitos fundamentais.',
 			en: 'The supreme and fundamental law of Brazil, organizing the State and guaranteeing fundamental rights.'
 		},
-		articles: [
-			{
-				number: '1',
-				label: 'Dos Princípios Fundamentais',
-				text: 'A República Federativa do Brasil, formada pela união indissolúvel dos Estados e Municípios e do Distrito Federal, constitui-se em Estado Democrático de Direito e tem como fundamentos:\nI - a soberania;\nII - a cidadania;\nIII - a dignidade da pessoa humana;\nIV - os valores sociais do trabalho e da livre iniciativa;\nV - o pluralismo político.\nParágrafo único. Todo o poder emana do povo, que o exerce por meio de representantes eleitos ou diretamente, nos termos desta Constituição.'
-			},
-			{
-				number: '3',
-				text: 'Constituem objetivos fundamentais da República Federativa do Brasil:\nI - construir uma sociedade livre, justa e solidária;\nII - garantir o desenvolvimento nacional;\nIII - erradicar a pobreza e a marginalização e reduzir as desigualdades sociais e regionais;\nIV - promover o bem de todos, sem preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação.'
-			},
-			{
-				number: '5',
-				label: 'Dos Direitos e Deveres Individuais e Coletivos',
-				text: 'Todos são iguais perante a lei, sem distinção de qualquer natureza, garantindo-se aos brasileiros e aos estrangeiros residentes no País a inviolabilidade do direito à vida, à liberdade, à igualdade, à segurança e à propriedade, nos termos seguintes:\nI - homens e mulheres são iguais em direitos e obrigações, nos termos desta Constituição;\nII - ninguém será obrigado a fazer ou deixar de fazer alguma coisa senão em virtude de lei;\nIII - ninguém será submetido a tortura nem a tratamento desumano ou degradante.'
-			}
-		],
+		articles: constituicaoArticles as Article[],
 		source: { name: 'LexML', url: lexmlUrl(constituicaoUrn) }
 	},
 	{
