@@ -1,0 +1,119 @@
+// Server-only client for the LexML SRU (Search/Retrieve via URL) endpoint. It is
+// the only module that talks to LexML over the network. It builds a CQL request,
+// fetches XML, and delegates parsing to the pure `parseSruResponse`. Failures are
+// turned into user-safe warnings — the page never sees a raw exception.
+
+import type { LegalSearchParams, LegalSearchResponse, SearchSort } from '$lib/legal/search-types';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '$lib/legal/search-types';
+import { buildCql, toStartRecord } from './cql';
+import { parseSruResponse } from './sru-parse';
+
+/** Official LexML SRU endpoint. */
+export const LEXML_SRU_ENDPOINT = 'https://www.lexml.gov.br/busca/SRU';
+
+/** Hard cap so a crafted `pageSize` can't ask LexML for an unbounded page. */
+const MAX_PAGE_SIZE = 50;
+
+export type FetchLike = typeof fetch;
+
+function clampPage(page: number | undefined): number {
+	if (!Number.isFinite(page) || (page as number) < 1) return DEFAULT_PAGE;
+	return Math.floor(page as number);
+}
+
+function clampPageSize(pageSize: number | undefined): number {
+	if (!Number.isFinite(pageSize) || (pageSize as number) < 1) return DEFAULT_PAGE_SIZE;
+	return Math.min(Math.floor(pageSize as number), MAX_PAGE_SIZE);
+}
+
+/**
+ * SRU ordering support is unverified, so we never ask the server to sort. Instead
+ * we sort the records of the *current page* locally and flag it, so the UI can be
+ * honest that this is not a corpus-wide ordering.
+ */
+function applyPageSort(response: LegalSearchResponse, sort: SearchSort): LegalSearchResponse {
+	if (sort === 'relevance' || response.items.length === 0) return response;
+
+	const items = [...response.items];
+	if (sort === 'title') {
+		items.sort((a, b) => a.title.localeCompare(b.title, 'pt'));
+	} else {
+		const dir = sort === 'date_asc' ? 1 : -1;
+		items.sort((a, b) => {
+			// Missing dates sort last regardless of direction.
+			if (!a.date && !b.date) return 0;
+			if (!a.date) return 1;
+			if (!b.date) return -1;
+			return a.date < b.date ? -dir : a.date > b.date ? dir : 0;
+		});
+	}
+
+	return { ...response, items, warnings: [...(response.warnings ?? []), 'sort_page_only'] };
+}
+
+export class LexmlSruSource {
+	constructor(private readonly endpoint: string = LEXML_SRU_ENDPOINT) {}
+
+	async search(params: LegalSearchParams, fetchImpl: FetchLike): Promise<LegalSearchResponse> {
+		const page = clampPage(params.page);
+		const pageSize = clampPageSize(params.pageSize);
+		const sort: SearchSort = params.sort ?? 'relevance';
+
+		const empty: LegalSearchResponse = {
+			items: [],
+			total: 0,
+			page,
+			pageSize,
+			source: 'lexml-sru'
+		};
+
+		const { cql, warnings: cqlWarnings } = buildCql({ ...params, page, pageSize });
+		if (!cql) {
+			// Nothing safe to search yet: require a query (browse-all is out of scope).
+			return { ...empty, warnings: [...cqlWarnings, 'require_query'] };
+		}
+
+		const url = new URL(this.endpoint);
+		url.searchParams.set('operation', 'searchRetrieve');
+		url.searchParams.set('version', '1.1');
+		url.searchParams.set('query', cql);
+		url.searchParams.set('maximumRecords', String(pageSize));
+		url.searchParams.set('startRecord', String(toStartRecord(page, pageSize)));
+
+		let response: Response;
+		try {
+			response = await fetchImpl(url.toString(), {
+				headers: { Accept: 'application/xml' },
+				// Cloudflare edge cache; ignored on runtimes that don't support `cf`.
+				cf: { cacheTtl: 300, cacheEverything: true }
+			} as RequestInit);
+		} catch (cause) {
+			console.error('LexML SRU network error:', cause);
+			return { ...empty, warnings: [...cqlWarnings, 'source_unavailable'] };
+		}
+
+		if (!response.ok) {
+			console.error(`LexML SRU returned HTTP ${response.status}`);
+			return { ...empty, warnings: [...cqlWarnings, 'source_unavailable'] };
+		}
+
+		let xml: string;
+		try {
+			xml = await response.text();
+		} catch (cause) {
+			console.error('LexML SRU body read error:', cause);
+			return { ...empty, warnings: [...cqlWarnings, 'source_unavailable'] };
+		}
+
+		const parsed = parseSruResponse(xml, { page, pageSize });
+		const merged: LegalSearchResponse = {
+			...parsed,
+			warnings: [...cqlWarnings, ...(parsed.warnings ?? [])]
+		};
+
+		return applyPageSort(merged, sort);
+	}
+}
+
+/** Shared singleton, mirroring the `legalSource` composition-root pattern. */
+export const lexmlSruSource = new LexmlSruSource();

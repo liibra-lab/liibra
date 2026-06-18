@@ -63,6 +63,39 @@ export interface Messages {
 	prop_not_found_body: string;
 	prev_page: string;
 	next_page: string;
+	page_label: string;
+	// Search filters / facet rail
+	filters_title: string;
+	filter_category: string;
+	filter_locality: string;
+	filter_authority: string;
+	filter_date_from: string;
+	filter_date_to: string;
+	filter_all_categories: string;
+	filter_apply: string;
+	filter_clear: string;
+	sort_label: string;
+	sort_relevance: string;
+	sort_title: string;
+	sort_date_asc: string;
+	sort_date_desc: string;
+	// LexML document categories
+	cat_legislacao: string;
+	cat_jurisprudencia: string;
+	cat_doutrina: string;
+	cat_proposicoes: string;
+	cat_outras_manifestacoes: string;
+	cat_publicacao_oficial: string;
+	cat_processo: string;
+	// Result card + warnings
+	result_urn: string;
+	result_source: string;
+	search_source_note: string;
+	warning_source_unavailable: string;
+	warning_malformed: string;
+	warning_sort_page_only: string;
+	warning_invalid_date: string;
+	warning_sru_diagnostic: string;
 }
 
 const pt: Messages = {
@@ -127,7 +160,38 @@ const pt: Messages = {
 	prop_not_found_title: 'Proposição não encontrada',
 	prop_not_found_body: 'Não foi possível localizar a proposição solicitada.',
 	prev_page: 'Anterior',
-	next_page: 'Próxima'
+	next_page: 'Próxima',
+	page_label: 'Página',
+	filters_title: 'Filtros',
+	filter_category: 'Categoria do documento',
+	filter_locality: 'Localidade',
+	filter_authority: 'Autoridade',
+	filter_date_from: 'De (ano)',
+	filter_date_to: 'Até (ano)',
+	filter_all_categories: 'Todas as categorias',
+	filter_apply: 'Aplicar',
+	filter_clear: 'Limpar',
+	sort_label: 'Ordenar por',
+	sort_relevance: 'Relevância',
+	sort_title: 'Título',
+	sort_date_asc: 'Data ascendente',
+	sort_date_desc: 'Data descendente',
+	cat_legislacao: 'Legislação',
+	cat_jurisprudencia: 'Jurisprudência',
+	cat_doutrina: 'Doutrina',
+	cat_proposicoes: 'Proposições Legislativas',
+	cat_outras_manifestacoes: 'Outras Manifestações',
+	cat_publicacao_oficial: 'Publicação Oficial',
+	cat_processo: 'Processo',
+	result_urn: 'URN',
+	result_source: 'Ver no LexML',
+	search_source_note: 'Resultados da busca no LexML Brasil (SRU).',
+	warning_source_unavailable:
+		'Não foi possível contatar o LexML agora. Tente novamente em instantes.',
+	warning_malformed: 'A resposta do LexML não pôde ser interpretada.',
+	warning_sort_page_only: 'Ordenação aplicada apenas a esta página de resultados.',
+	warning_invalid_date: 'Filtro de data ignorado: use um ano com quatro dígitos (AAAA).',
+	warning_sru_diagnostic: 'O LexML retornou um aviso para esta consulta.'
 };
 
 const en: Messages = {
@@ -192,7 +256,38 @@ const en: Messages = {
 	prop_not_found_title: 'Bill not found',
 	prop_not_found_body: 'The requested bill could not be located.',
 	prev_page: 'Previous',
-	next_page: 'Next'
+	next_page: 'Next',
+	page_label: 'Page',
+	filters_title: 'Filters',
+	filter_category: 'Document category',
+	filter_locality: 'Locality',
+	filter_authority: 'Authority',
+	filter_date_from: 'From (year)',
+	filter_date_to: 'To (year)',
+	filter_all_categories: 'All categories',
+	filter_apply: 'Apply',
+	filter_clear: 'Clear',
+	sort_label: 'Sort by',
+	sort_relevance: 'Relevance',
+	sort_title: 'Title',
+	sort_date_asc: 'Date ascending',
+	sort_date_desc: 'Date descending',
+	cat_legislacao: 'Legislation',
+	cat_jurisprudencia: 'Case law',
+	cat_doutrina: 'Doctrine',
+	cat_proposicoes: 'Legislative bills',
+	cat_outras_manifestacoes: 'Other instruments',
+	cat_publicacao_oficial: 'Official publications',
+	cat_processo: 'Proceedings',
+	result_urn: 'URN',
+	result_source: 'View on LexML',
+	search_source_note: 'Search results from LexML Brasil (SRU).',
+	warning_source_unavailable:
+		'Could not reach LexML right now. Please try again shortly.',
+	warning_malformed: 'The LexML response could not be read.',
+	warning_sort_page_only: 'Ordering applied to this page of results only.',
+	warning_invalid_date: 'Date filter ignored: use a four-digit year (YYYY).',
+	warning_sru_diagnostic: 'LexML returned a notice for this query.'
 };
 
 export const messages: Record<Locale, Messages> = { pt, en };

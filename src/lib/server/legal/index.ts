@@ -10,5 +10,17 @@ import { seedDocuments } from './seed-data';
 
 export const legalSource: LegalSource = new SeedLegalSource(seedDocuments);
 
+// Live LexML SRU metadata search (network-backed), used by the /search route.
+export { lexmlSruSource, LexmlSruSource, LEXML_SRU_ENDPOINT } from './lexml-sru-source';
+
 export type { LegalDocument, Article, DocumentType } from './types';
 export type { SearchHit, SearchOptions, MatchedArticle, LegalSource } from './source';
+export type {
+	LegalDocumentCategory,
+	SearchSort,
+	LegalSearchParams,
+	LegalSearchResultItem,
+	LegalFacetGroup,
+	LegalFacetValue,
+	LegalSearchResponse
+} from '$lib/legal/search-types';

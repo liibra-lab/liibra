@@ -1,4 +1,5 @@
 import type { DocumentType } from '$lib/server/legal/types';
+import type { LegalDocumentCategory } from '$lib/legal/search-types';
 import type { Locale } from './locales';
 import { messages, type Messages } from './messages';
 
@@ -27,6 +28,43 @@ export function documentTypeLabel(locale: Locale, type: DocumentType): string {
 		case 'codigo':
 			return m.type_codigo;
 	}
+}
+
+/** Localized human label for a LexML document category. */
+export function documentCategoryLabel(locale: Locale, category: LegalDocumentCategory): string {
+	const m = messages[locale];
+	switch (category) {
+		case 'legislacao':
+			return m.cat_legislacao;
+		case 'jurisprudencia':
+			return m.cat_jurisprudencia;
+		case 'doutrina':
+			return m.cat_doutrina;
+		case 'proposicoes':
+			return m.cat_proposicoes;
+		case 'outras_manifestacoes':
+			return m.cat_outras_manifestacoes;
+		case 'publicacao_oficial':
+			return m.cat_publicacao_oficial;
+		case 'processo':
+			return m.cat_processo;
+	}
+}
+
+/**
+ * Map a source warning code to a user-safe message. Unknown codes (including
+ * `sru_diagnostic:*`) collapse to a generic notice so raw server text is never
+ * shown. Returns null for codes the UI handles elsewhere (e.g. `require_query`).
+ */
+export function searchWarningLabel(locale: Locale, code: string): string | null {
+	const m = messages[locale];
+	if (code === 'require_query') return null;
+	if (code === 'source_unavailable') return m.warning_source_unavailable;
+	if (code === 'malformed_response') return m.warning_malformed;
+	if (code === 'sort_page_only') return m.warning_sort_page_only;
+	if (code === 'invalid_date_from' || code === 'invalid_date_to') return m.warning_invalid_date;
+	if (code.startsWith('sru_diagnostic:')) return m.warning_sru_diagnostic;
+	return null;
 }
 
 /** Format an ISO date for display in the active locale. */
