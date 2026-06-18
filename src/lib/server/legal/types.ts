@@ -7,6 +7,9 @@ export type DocumentType = 'constituicao' | 'lei' | 'decreto' | 'codigo';
 // Only federal jurisdiction is seeded today; widen as coverage grows.
 export type Jurisdiction = 'br:federal';
 
+/** Whether the stored `articles` are the complete text or partial excerpts. */
+export type LegalCoverage = 'full' | 'partial';
+
 export interface Article {
 	/** Brazilian article numbering kept as a string: "1", "1.012", "5". */
 	number: string;
@@ -40,6 +43,8 @@ export interface LegalDocument {
 	shortTitle?: LocalizedTitle;
 	summary?: { pt?: string; en?: string };
 	articles: Article[];
+	/** Whether `articles` is the full document text or partial excerpts. */
+	coverage: LegalCoverage;
 	/** Provenance — always attributes the canonical LexML record. */
 	source: {
 		name: 'LexML';
