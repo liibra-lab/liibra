@@ -12,7 +12,7 @@ import type {
 	Provenance
 } from './types';
 
-const PAGE_SIZE = 20;
+export const PAGE_SIZE = 20;
 
 /** Canonical public page for a proposition on camara.leg.br. */
 export function officialUrl(id: number): string {

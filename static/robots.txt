@@ -1,5 +1,7 @@
 # Liibra — open-access Brazilian legal information.
 # Search engines welcome; AI training/scraping crawlers disallowed.
+Sitemap: https://liibra.com.br/sitemap.xml
+
 User-agent: *
 Disallow:
 

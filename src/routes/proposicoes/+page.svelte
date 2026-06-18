@@ -110,7 +110,12 @@
 		{:else}
 			<span></span>
 		{/if}
-		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-		<a href={pageHref(page + 1)}>{m.next_page} →</a>
+		{#if data.hasNext}
+			<!-- pageHref() builds a resolve()'d path with a query string -->
+			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+			<a href={pageHref(page + 1)}>{m.next_page} →</a>
+		{:else}
+			<span></span>
+		{/if}
 	</nav>
 {/if}

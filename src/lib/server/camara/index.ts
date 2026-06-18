@@ -7,7 +7,7 @@ import { CamaraPropositionSource } from './camara-source';
 
 export const propositionSource: PropositionSource = new CamaraPropositionSource();
 
-export { buildProvenance, officialUrl, apiUrl } from './camara-source';
+export { buildProvenance, officialUrl, apiUrl, PAGE_SIZE } from './camara-source';
 export { CamaraApiError } from './client';
 export type {
 	PropositionSummary,

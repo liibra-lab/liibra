@@ -5,7 +5,9 @@
 	let { proposition }: { proposition: PropositionSummary } = $props();
 
 	let href = $derived(resolve('/proposicoes/[id]', { id: String(proposition.id) }));
-	let label = $derived(`${proposition.siglaTipo} ${proposition.numero}/${proposition.ano}`);
+	let label = $derived(
+		`${proposition.siglaTipo} ${proposition.numero}${proposition.ano ? `/${proposition.ano}` : ''}`
+	);
 </script>
 
 <article class="border-b border-liibra-rule py-4">
