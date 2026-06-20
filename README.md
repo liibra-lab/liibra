@@ -117,16 +117,19 @@ This repository intentionally keeps generated and sensitive material out of git:
 ## Project layout
 
 ```text
-.github/workflows/      CI workflow
-src/hooks.server.ts     Request-scoped locale handling and baseline response headers
-src/lib/server/         Server-only API clients and legal data parsing
-src/lib/components/     Shared Svelte components
-src/lib/i18n/           Interface messages and locale helpers
-src/routes/             SvelteKit routes
-static/                 Static files served as-is
-tests/                  Node test-runner tests
-wrangler.jsonc          Cloudflare Workers configuration
-vite.config.ts          Vite, SvelteKit, Tailwind, and Cloudflare adapter config
+.github/CODEOWNERS     Code owner rules for sensitive paths
+.github/dependabot.yml Dependency update automation
+.github/workflows/     CI workflow
+SECURITY.md            Private vulnerability reporting policy
+src/hooks.server.ts    Request-scoped locale handling and baseline response headers
+src/lib/server/        Server-only API clients and legal data parsing
+src/lib/components/    Shared Svelte components
+src/lib/i18n/          Interface messages and locale helpers
+src/routes/            SvelteKit routes
+static/                Static files served as-is
+tests/                 Node test-runner tests
+wrangler.jsonc         Cloudflare Workers configuration
+vite.config.ts         Vite, SvelteKit, Tailwind, and Cloudflare adapter config
 ```
 
 ## Current security posture
@@ -138,13 +141,13 @@ Already present:
 - Worker preview URLs and `workers.dev` exposure are disabled in Wrangler config.
 - Baseline headers are applied from `src/hooks.server.ts`.
 - External legal data requests are centralized in server-only modules.
+- Dependabot tracks npm and GitHub Actions updates.
+- `CODEOWNERS` marks repository governance, deployment, package, and server-side files as owner-reviewed paths.
+- `SECURITY.md` defines private vulnerability reporting.
 
-Planned next hardening, intentionally not part of this cleanup:
+Planned next hardening:
 
 - Branch ruleset for `main`.
-- Dependabot configuration.
-- `CODEOWNERS`.
-- `SECURITY.md`.
 - Tested CSP and HSTS headers.
 - GitHub Actions pinned to full commit SHAs.
 
