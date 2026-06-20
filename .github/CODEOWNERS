@@ -1,0 +1,17 @@
+# Global ownership.
+# Use the repository owner account until a separate maintainer/team is created.
+* @liibra-lab
+
+# Repository governance and automation.
+.github/ @liibra-lab
+.github/workflows/ @liibra-lab
+.github/dependabot.yml @liibra-lab
+
+# Deployment and supply-chain critical files.
+wrangler.jsonc @liibra-lab
+package.json @liibra-lab
+package-lock.json @liibra-lab
+
+# Server-side request handling and external data clients.
+src/hooks.server.ts @liibra-lab
+src/lib/server/ @liibra-lab
