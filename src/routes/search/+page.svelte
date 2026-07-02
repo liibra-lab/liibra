@@ -32,6 +32,20 @@
 	let totalPages = $derived(
 		result.pageSize > 0 ? Math.ceil(result.total / result.pageSize) : 0
 	);
+	let hasNext = $derived(totalPages === 0 || result.page < totalPages);
+
+	// Page numbers to render: first, last, and a window around the current page,
+	// with 'gap' marking each elided range.
+	function pageItems(current: number, total: number): (number | 'gap')[] {
+		const wanted = [1, current - 1, current, current + 1, total];
+		const pages = [...new Set(wanted.filter((p) => p >= 1 && p <= total))].sort((a, b) => a - b);
+		const items: (number | 'gap')[] = [];
+		for (const [i, p] of pages.entries()) {
+			if (i > 0 && p - pages[i - 1] > 1) items.push('gap');
+			items.push(p);
+		}
+		return items;
+	}
 
 	type Overrides = { page?: number; sort?: SearchSort };
 
@@ -121,25 +135,48 @@
 					{/each}
 				</div>
 
-				<nav class="mt-6 flex items-center justify-between text-sm" aria-label="pagination">
-					{#if result.page > 1}
-						<!-- searchUrl() builds a resolve()'d path with a query string -->
-						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-						<a href={searchUrl({ page: result.page - 1 })}>← {m.prev_page}</a>
-					{:else}
-						<span></span>
-					{/if}
-					<span class="text-liibra-muted">
-						{m.page_label} {result.page}{#if totalPages > 0} / {totalPages}{/if}
-					</span>
-					{#if totalPages === 0 || result.page < totalPages}
-						<!-- searchUrl() builds a resolve()'d path with a query string -->
-						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-						<a href={searchUrl({ page: result.page + 1 })}>{m.next_page} →</a>
-					{:else}
-						<span></span>
-					{/if}
-				</nav>
+				{#if result.page > 1 || hasNext}
+					<!-- searchUrl() builds a resolve()'d path with a query string -->
+					<!-- eslint-disable svelte/no-navigation-without-resolve -->
+					<nav
+						class="mt-6 flex flex-wrap items-center justify-center gap-1.5 text-sm"
+						aria-label={m.pagination_label}
+					>
+						{#if result.page > 1}
+							<a href={searchUrl({ page: result.page - 1 })} class="rounded-md px-2 py-1">
+								← {m.prev_page}
+							</a>
+						{/if}
+						{#if totalPages > 0}
+							{#each pageItems(result.page, totalPages) as item, i (item === 'gap' ? `gap-${i}` : item)}
+								{#if item === 'gap'}
+									<span class="px-1 text-liibra-muted" aria-hidden="true">…</span>
+								{:else if item === result.page}
+									<span
+										aria-current="page"
+										class="rounded-md border border-liibra-rule bg-liibra-surface px-2.5 py-1 font-medium"
+									>
+										{item}
+									</span>
+								{:else}
+									<a
+										href={searchUrl({ page: item })}
+										aria-label={`${m.page_label} ${item}`}
+										class="rounded-md px-2.5 py-1"
+									>
+										{item}
+									</a>
+								{/if}
+							{/each}
+						{/if}
+						{#if hasNext}
+							<a href={searchUrl({ page: result.page + 1 })} class="rounded-md px-2 py-1">
+								{m.next_page} →
+							</a>
+						{/if}
+					</nav>
+					<!-- eslint-enable svelte/no-navigation-without-resolve -->
+				{/if}
 
 				<p class="mt-6 text-xs text-liibra-muted">{m.search_source_note}</p>
 			{/if}
