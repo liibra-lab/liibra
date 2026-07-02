@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Fraunces';
+    font-style: normal;
+    font-weight: 300 900;
+    src: url('../src/lib/assets/fonts/fraunces-latin-var.woff2') format('woff2');
+  }
+  * { margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #ffffff;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 96px;
+    font-family: 'Fraunces', Georgia, serif;
+  }
+  img.wordmark { width: 560px; height: auto; display: block; }
+  p.tagline {
+    margin-top: 44px;
+    font-size: 44px;
+    font-weight: 420;
+    color: #5a5a5a;
+    letter-spacing: -0.01em;
+  }
+  p.domain {
+    margin-top: 60px;
+    font-size: 28px;
+    color: #8a6d1f;
+    font-weight: 550;
+  }
+</style>
+</head>
+<body>
+  <div style="position:fixed;top:0;left:0;width:1200px;height:14px;background:#8a6d1f"></div>
+  <div style="position:fixed;bottom:0;left:0;width:1200px;height:14px;background:#8a6d1f"></div>
+  <img class="wordmark" src="../src/lib/assets/liibra-wordmark.svg" alt="Liibra">
+  <p class="tagline">Informação jurídica brasileira, aberta e acessível</p>
+  <p class="domain">liibra.com.br</p>
+</body>
+</html>
+<!--
+  Source for static/og-default.png (1200x630 Open Graph card).
+  Regenerate with headless Chromium from the repo root:
+
+    chromium --headless --no-sandbox --allow-file-access-from-files \
+      --hide-scrollbars --window-size=1200,630 \
+      --screenshot=static/og-default.png "file://$PWD/scripts/og-default.html"
+-->

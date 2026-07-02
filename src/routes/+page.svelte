@@ -12,14 +12,11 @@
 <svelte:head>
 	<title>{m.brand} — {m.tagline}</title>
 	<meta name="description" content={m.hero_subtitle} />
-	<link rel="canonical" href="https://liibra.com.br/" />
 
 	<meta property="og:title" content={`${m.brand} — ${m.tagline}`} />
 	<meta property="og:description" content={m.hero_subtitle} />
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://liibra.com.br/" />
 
-	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content={`${m.brand} — ${m.tagline}`} />
 	<meta name="twitter:description" content={m.hero_subtitle} />
 </svelte:head>

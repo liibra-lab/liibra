@@ -17,6 +17,13 @@
 <svelte:head>
 	<title>{label} · {m.brand}</title>
 	{#if p.ementa}<meta name="description" content={p.ementa} />{/if}
+
+	<meta property="og:title" content={label} />
+	{#if p.ementa}<meta property="og:description" content={p.ementa} />{/if}
+	<meta property="og:type" content="article" />
+
+	<meta name="twitter:title" content={label} />
+	{#if p.ementa}<meta name="twitter:description" content={p.ementa} />{/if}
 </svelte:head>
 
 <Breadcrumbs
