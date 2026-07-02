@@ -5,7 +5,7 @@
 
 import type { LegalSearchParams, LegalSearchResponse, SearchSort } from '$lib/legal/search-types';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '$lib/legal/search-types';
-import { cachedFetch, EDGE_CACHE_TTL_SECONDS } from '$lib/server/edge-cache';
+import { cachedFetch } from '$lib/server/edge-cache';
 import { buildCql, toStartRecord } from './cql';
 import { parseSruResponse } from './sru-parse';
 
@@ -14,6 +14,9 @@ export const LEXML_SRU_ENDPOINT = 'https://www.lexml.gov.br/busca/SRU';
 
 /** Hard cap so a crafted `pageSize` can't ask LexML for an unbounded page. */
 const MAX_PAGE_SIZE = 50;
+
+/** LexML index/search results are near-static; 1 hour in the edge cache. */
+export const SEARCH_TTL_SECONDS = 3600;
 
 export type FetchLike = typeof fetch;
 
@@ -89,9 +92,10 @@ export class LexmlSruSource {
 				url.toString(),
 				{
 					headers: { Accept: 'application/xml' },
-					cf: { cacheTtl: EDGE_CACHE_TTL_SECONDS, cacheEverything: true }
+					cf: { cacheTtl: SEARCH_TTL_SECONDS, cacheEverything: true }
 				} as RequestInit,
-				fetchImpl
+				fetchImpl,
+				SEARCH_TTL_SECONDS
 			);
 		} catch (cause) {
 			console.error('LexML SRU network error:', cause);

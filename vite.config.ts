@@ -4,6 +4,12 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+	build: {
+		// Never inline imported assets as data: URIs. Data URIs are re-sent inside
+		// every HTML response and can't be cached; hashed asset files are served
+		// once with immutable cache headers from the Cloudflare CDN.
+		assetsInlineLimit: 0
+	},
 	plugins: [
 		tailwindcss(),
 		sveltekit({

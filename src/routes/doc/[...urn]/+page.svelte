@@ -20,6 +20,13 @@
 <svelte:head>
 	<title>{short ?? title} · {m.brand}</title>
 	{#if summary}<meta name="description" content={summary} />{/if}
+
+	<meta property="og:title" content={short ?? title} />
+	{#if summary}<meta property="og:description" content={summary} />{/if}
+	<meta property="og:type" content="article" />
+
+	<meta name="twitter:title" content={short ?? title} />
+	{#if summary}<meta name="twitter:description" content={summary} />{/if}
 </svelte:head>
 
 <Breadcrumbs

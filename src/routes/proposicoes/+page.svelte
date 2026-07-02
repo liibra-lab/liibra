@@ -39,6 +39,13 @@
 <svelte:head>
 	<title>{m.prop_browse_title} · {m.brand}</title>
 	<meta name="description" content={m.prop_browse_subtitle} />
+
+	<meta property="og:title" content={m.prop_browse_title} />
+	<meta property="og:description" content={m.prop_browse_subtitle} />
+	<meta property="og:type" content="website" />
+
+	<meta name="twitter:title" content={m.prop_browse_title} />
+	<meta name="twitter:description" content={m.prop_browse_subtitle} />
 </svelte:head>
 
 <Breadcrumbs

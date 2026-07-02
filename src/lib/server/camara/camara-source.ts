@@ -7,6 +7,8 @@ import {
 	camaraFetch,
 	camaraFetchEnvelope,
 	CamaraApiError,
+	DETAIL_TTL_SECONDS,
+	LIST_TTL_SECONDS,
 	type CamaraLink,
 	type FetchLike
 } from './client';
@@ -119,7 +121,8 @@ export class CamaraPropositionSource implements PropositionSource {
 				ordem: 'DESC',
 				ordenarPor: 'id'
 			},
-			fetchImpl
+			fetchImpl,
+			LIST_TTL_SECONDS
 		);
 		return {
 			items: dados.map(mapSummary),
@@ -131,7 +134,7 @@ export class CamaraPropositionSource implements PropositionSource {
 	async getById(id: number, fetchImpl: FetchLike): Promise<PropositionDetail | null> {
 		let raw: RawDetail;
 		try {
-			raw = await camaraFetch<RawDetail>(`/proposicoes/${id}`, undefined, fetchImpl);
+			raw = await camaraFetch<RawDetail>(`/proposicoes/${id}`, undefined, fetchImpl, DETAIL_TTL_SECONDS);
 		} catch (err) {
 			if (err instanceof CamaraApiError && err.status === 404) return null;
 			throw err;
@@ -149,7 +152,12 @@ export class CamaraPropositionSource implements PropositionSource {
 	async getAuthors(id: number, fetchImpl: FetchLike): Promise<Author[]> {
 		let dados: RawAuthor[];
 		try {
-			dados = await camaraFetch<RawAuthor[]>(`/proposicoes/${id}/autores`, undefined, fetchImpl);
+			dados = await camaraFetch<RawAuthor[]>(
+				`/proposicoes/${id}/autores`,
+				undefined,
+				fetchImpl,
+				DETAIL_TTL_SECONDS
+			);
 		} catch (err) {
 			if (err instanceof CamaraApiError && err.status === 404) return [];
 			throw err;
