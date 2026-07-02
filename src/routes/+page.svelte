@@ -18,10 +18,15 @@
 	<meta property="og:description" content={m.hero_subtitle} />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://liibra.com.br/" />
+	<meta property="og:image" content="https://liibra.com.br/og-image.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content={m.brand} />
 
-	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={`${m.brand} — ${m.tagline}`} />
 	<meta name="twitter:description" content={m.hero_subtitle} />
+	<meta name="twitter:image" content="https://liibra.com.br/og-image.png" />
 </svelte:head>
 
 <section class="border-b border-liibra-rule pb-10 text-center">

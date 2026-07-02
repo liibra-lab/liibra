@@ -19,6 +19,13 @@ pivot dot doubles as the tittle of an *i*.
 | Vertical lockup | `src/lib/assets/liibra-logo.svg` | Covers, social cards, splash |
 | Vertical lockup (white) | `src/lib/assets/liibra-logo-white.svg` | Dark backgrounds |
 | Favicon | `src/lib/assets/liibra-favicon.svg` | Browser tabs (auto light/dark) |
+| Social card | `static/og-image.png` | `og:image` / link previews (1200×630) |
+| Touch icon | `static/apple-touch-icon.png` | iOS/Android home screens (180×180) |
+
+The PNGs are rendered from the SVG lockups: the social card is the vertical
+lockup centered on `liibra-bg` with a 10 px brass rule across the top; the
+touch icon is the mark centered on `liibra-surface`. Regenerate them from the
+SVGs if the logo changes.
 
 ### Wordmark construction
 
