@@ -18,6 +18,15 @@ export interface PropositionSummary {
 	ementa: string;
 }
 
+/** One page of list results plus what the API reports about the whole set. */
+export interface PropositionPage {
+	items: PropositionSummary[];
+	/** Whether the API advertises a `next` pagination link. */
+	hasNext: boolean;
+	/** Total page count, when the API advertises a `last` pagination link. */
+	totalPages?: number;
+}
+
 /** Tramitação status, from `dados.statusProposicao` on the detail endpoint. */
 export interface PropositionStatus {
 	dataHora: string;

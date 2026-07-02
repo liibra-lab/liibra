@@ -12,6 +12,7 @@ export { CamaraApiError } from './client';
 export type {
 	PropositionSummary,
 	PropositionDetail,
+	PropositionPage,
 	PropositionStatus,
 	Author,
 	Provenance
