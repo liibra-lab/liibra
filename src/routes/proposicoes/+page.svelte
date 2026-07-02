@@ -14,6 +14,19 @@
 
 	let page = $derived(data.filters.page);
 
+	// Page numbers to render: first, last, and a window around the current page,
+	// with 'gap' marking each elided range.
+	function pageItems(current: number, total: number): (number | 'gap')[] {
+		const wanted = [1, current - 1, current, current + 1, total];
+		const pages = [...new Set(wanted.filter((p) => p >= 1 && p <= total))].sort((a, b) => a - b);
+		const items: (number | 'gap')[] = [];
+		for (const [i, p] of pages.entries()) {
+			if (i > 0 && p - pages[i - 1] > 1) items.push('gap');
+			items.push(p);
+		}
+		return items;
+	}
+
 	function pageHref(target: number): string {
 		const parts = [`pagina=${target}`];
 		if (data.filters.keywords) parts.push(`q=${encodeURIComponent(data.filters.keywords)}`);
@@ -102,20 +115,38 @@
 		{/each}
 	</div>
 
-	<nav class="mt-6 flex items-center justify-between text-sm" aria-label="pagination">
-		{#if page > 1}
-			<!-- pageHref() builds a resolve()'d path with a query string -->
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a href={pageHref(page - 1)}>← {m.prev_page}</a>
-		{:else}
-			<span></span>
-		{/if}
-		{#if data.hasNext}
-			<!-- pageHref() builds a resolve()'d path with a query string -->
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a href={pageHref(page + 1)}>{m.next_page} →</a>
-		{:else}
-			<span></span>
-		{/if}
-	</nav>
+	{#if page > 1 || data.hasNext}
+		<!-- pageHref() builds a resolve()'d path with a query string -->
+		<!-- eslint-disable svelte/no-navigation-without-resolve -->
+		<nav
+			class="mt-6 flex flex-wrap items-center justify-center gap-1.5 text-sm"
+			aria-label={m.pagination_label}
+		>
+			{#if page > 1}
+				<a href={pageHref(page - 1)} class="rounded-md px-2 py-1">← {m.prev_page}</a>
+			{/if}
+			{#if data.totalPages}
+				{#each pageItems(page, data.totalPages) as item, i (item === 'gap' ? `gap-${i}` : item)}
+					{#if item === 'gap'}
+						<span class="px-1 text-liibra-muted" aria-hidden="true">…</span>
+					{:else if item === page}
+						<span
+							aria-current="page"
+							class="rounded-md border border-liibra-rule bg-liibra-surface px-2.5 py-1 font-medium"
+						>
+							{item}
+						</span>
+					{:else}
+						<a href={pageHref(item)} aria-label={`${m.page_label} ${item}`} class="rounded-md px-2.5 py-1">
+							{item}
+						</a>
+					{/if}
+				{/each}
+			{/if}
+			{#if data.hasNext}
+				<a href={pageHref(page + 1)} class="rounded-md px-2 py-1">{m.next_page} →</a>
+			{/if}
+		</nav>
+		<!-- eslint-enable svelte/no-navigation-without-resolve -->
+	{/if}
 {/if}

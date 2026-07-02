@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { propositionSource, CamaraApiError, PAGE_SIZE, type PropositionSummary } from '$lib/server/camara';
+import { propositionSource, CamaraApiError, type PropositionPage } from '$lib/server/camara';
 
 export const load: PageServerLoad = async ({ url, fetch }) => {
 	const keywords = (url.searchParams.get('q') ?? '').trim();
@@ -16,23 +16,20 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
 		page
 	};
 
-	let propositions: PropositionSummary[] = [];
+	let result: PropositionPage = { items: [], hasNext: false };
 	let failed = false;
 	try {
-		propositions = await propositionSource.list(filters, fetch);
+		result = await propositionSource.list(filters, fetch);
 	} catch (err) {
 		if (!(err instanceof CamaraApiError)) throw err;
 		failed = true;
 	}
 
-	// A full page implies there may be more; a short page is the last one. The API
-	// returns no total count, so this is the best signal without an extra request.
-	const hasNext = propositions.length === PAGE_SIZE;
-
 	return {
-		propositions,
+		propositions: result.items,
 		failed,
-		hasNext,
+		hasNext: result.hasNext,
+		totalPages: result.totalPages ?? null,
 		filters: { keywords, siglaTipo, ano: anoRaw, page }
 	};
 };

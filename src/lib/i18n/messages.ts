@@ -66,6 +66,7 @@ export interface Messages {
 	prev_page: string;
 	next_page: string;
 	page_label: string;
+	pagination_label: string;
 	// Search filters / facet rail
 	filters_title: string;
 	filter_category: string;
@@ -167,6 +168,7 @@ const pt: Messages = {
 	prev_page: 'Anterior',
 	next_page: 'Próxima',
 	page_label: 'Página',
+	pagination_label: 'Paginação',
 	filters_title: 'Filtros',
 	filter_category: 'Categoria do documento',
 	filter_locality: 'Localidade',
@@ -266,6 +268,7 @@ const en: Messages = {
 	prev_page: 'Previous',
 	next_page: 'Next',
 	page_label: 'Page',
+	pagination_label: 'Pagination',
 	filters_title: 'Filters',
 	filter_category: 'Document category',
 	filter_locality: 'Locality',

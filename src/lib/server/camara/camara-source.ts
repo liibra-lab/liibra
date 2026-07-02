@@ -2,11 +2,19 @@
 // Abertos" v2 API. Responsibilities: pass filters through to the API, map raw
 // JSON onto our domain types, and build the source-attribution URLs.
 
-import { API_BASE, camaraFetch, CamaraApiError, type FetchLike } from './client';
+import {
+	API_BASE,
+	camaraFetch,
+	camaraFetchEnvelope,
+	CamaraApiError,
+	type CamaraLink,
+	type FetchLike
+} from './client';
 import type { PropositionSource, PropositionFilters } from './source';
 import type {
 	Author,
 	PropositionDetail,
+	PropositionPage,
 	PropositionStatus,
 	PropositionSummary,
 	Provenance
@@ -76,6 +84,18 @@ function mapSummary(raw: RawSummary): PropositionSummary {
 	};
 }
 
+/** Total page count, read from the `pagina` param of the `last` pagination link. */
+function lastPageFrom(links: CamaraLink[]): number | undefined {
+	const last = links.find((link) => link.rel === 'last');
+	if (!last) return undefined;
+	try {
+		const page = Number(new URL(last.href).searchParams.get('pagina'));
+		return Number.isInteger(page) && page > 0 ? page : undefined;
+	} catch {
+		return undefined;
+	}
+}
+
 function mapStatus(raw: RawStatus): PropositionStatus {
 	return {
 		dataHora: raw.dataHora ?? '',
@@ -87,8 +107,8 @@ function mapStatus(raw: RawStatus): PropositionStatus {
 }
 
 export class CamaraPropositionSource implements PropositionSource {
-	async list(filters: PropositionFilters, fetchImpl: FetchLike): Promise<PropositionSummary[]> {
-		const dados = await camaraFetch<RawSummary[]>(
+	async list(filters: PropositionFilters, fetchImpl: FetchLike): Promise<PropositionPage> {
+		const { dados, links } = await camaraFetchEnvelope<RawSummary[]>(
 			'/proposicoes',
 			{
 				keywords: filters.keywords,
@@ -101,7 +121,11 @@ export class CamaraPropositionSource implements PropositionSource {
 			},
 			fetchImpl
 		);
-		return dados.map(mapSummary);
+		return {
+			items: dados.map(mapSummary),
+			hasNext: links.some((link) => link.rel === 'next'),
+			totalPages: lastPageFrom(links)
+		};
 	}
 
 	async getById(id: number, fetchImpl: FetchLike): Promise<PropositionDetail | null> {

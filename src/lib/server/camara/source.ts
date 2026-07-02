@@ -3,7 +3,7 @@
 // `LegalSource` pattern in `$lib/server/legal`. All methods are async because
 // the only implementation today is a network source.
 
-import type { Author, PropositionDetail, PropositionSummary } from './types';
+import type { Author, PropositionDetail, PropositionPage } from './types';
 import type { FetchLike } from './client';
 
 export interface PropositionFilters {
@@ -18,7 +18,7 @@ export interface PropositionFilters {
 }
 
 export interface PropositionSource {
-	list(filters: PropositionFilters, fetchImpl: FetchLike): Promise<PropositionSummary[]>;
+	list(filters: PropositionFilters, fetchImpl: FetchLike): Promise<PropositionPage>;
 	getById(id: number, fetchImpl: FetchLike): Promise<PropositionDetail | null>;
 	getAuthors(id: number, fetchImpl: FetchLike): Promise<Author[]>;
 }
