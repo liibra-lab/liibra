@@ -1,8 +1,9 @@
 # Liibra visual identity
 
-Liibra's identity is typography-first and library-like: ink on paper, one
-working blue, and a brass accent drawn from the scales in the mark. It should
-feel like a trustworthy public reading room, not a startup.
+Liibra's identity is typography-first, monochrome, and library-like: ink on
+paper, nothing else. Hierarchy comes from type, spacing, and hairline rules —
+never from color. It should feel like a trustworthy public reading room, not
+a startup.
 
 ## Logo
 
@@ -23,7 +24,7 @@ pivot dot doubles as the tittle of an *i*.
 | Touch icon | `static/apple-touch-icon.png` | iOS/Android home screens (180×180) |
 
 The PNGs are rendered from the SVG lockups: the social card is the vertical
-lockup centered on `liibra-bg` with a 10 px brass rule across the top; the
+lockup centered on `liibra-bg` with a 10 px ink rule across the top; the
 touch icon is the mark centered on `liibra-surface`. Regenerate them from the
 SVGs if the logo changes.
 
@@ -70,25 +71,28 @@ covers all Portuguese diacritics. Georgia is the fallback while it loads
 Defined as Tailwind v4 `@theme` tokens in `src/routes/layout.css`; Tailwind
 generates the utilities (`text-liibra-ink`, `border-liibra-rule`, …).
 
+The palette is monochrome — ink on paper, with two grays doing all the
+supporting work.
+
 | Token | Hex | Role |
 | --- | --- | --- |
-| `liibra-ink` | `#1a1a1b` | Text, logo fill |
-| `liibra-muted` | `#5a5a5a` | Secondary text, metadata |
+| `liibra-ink` | `#1a1a1b` | Text, links, primary buttons, logo fill, the header's top rule |
+| `liibra-muted` | `#5a5a5a` | Secondary text, metadata, resting link underlines |
 | `liibra-bg` | `#ffffff` | Page background |
 | `liibra-surface` | `#f7f6f3` | Warm paper — footer, panels, cards |
 | `liibra-rule` | `#e2e2e2` | Hairline borders and dividers |
-| `liibra-link` | `#1a5fb4` | Links, focus rings |
-| `liibra-link-visited` | `#6a3fa0` | Visited links |
-| `liibra-accent` | `#8a6d1f` | Brass — the header's top rule; small decorative moments only |
 
 Rules of thumb:
 
-- Blue is functional (it means "clickable"), never decorative. Don't use it
-  for headings or emphasis.
-- Brass is decorative, never functional — a rule, a marker, a detail. Use it
-  sparingly (one moment per view) and don't set body text in it.
-- Ink on `liibra-bg`/`liibra-surface` and `liibra-link` on white both meet
-  WCAG AA for normal text.
+- No hue anywhere. If something needs emphasis, use weight, size, the serif,
+  or space — not color.
+- Links are ink with an underline (muted at rest, ink on hover). The
+  underline, not a color, is what says "clickable", so never remove it from
+  a text link.
+- Primary actions are solid ink buttons with white text; secondary actions
+  are hairline-bordered.
+- Ink and muted on `liibra-bg`/`liibra-surface` all meet WCAG AA for normal
+  text; focus rings are 2 px ink.
 
 ## Voice cues for visuals
 

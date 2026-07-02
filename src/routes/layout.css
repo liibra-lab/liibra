@@ -16,22 +16,18 @@
 }
 
 /* Design tokens — the Liibra visual identity (see docs/BRAND.md). A
-   typography-first, Cornell LII–inspired system: ink on paper, one working
-   blue for links, and a brass accent drawn from the scales in the mark.
-   Tailwind v4 generates utilities from these (font-serif, text-liibra-link,
-   border-liibra-rule, …). */
+   typography-first, monochrome system: ink on paper, nothing else. Links are
+   underlined rather than colored. Tailwind v4 generates utilities from these
+   (font-serif, text-liibra-ink, border-liibra-rule, …). */
 @theme {
 	--font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
 	--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-	--color-liibra-link: #1a5fb4;
-	--color-liibra-link-visited: #6a3fa0;
 	--color-liibra-ink: #1a1a1b;
 	--color-liibra-muted: #5a5a5a;
 	--color-liibra-rule: #e2e2e2;
 	--color-liibra-bg: #ffffff;
 	--color-liibra-surface: #f7f6f3;
-	--color-liibra-accent: #8a6d1f;
 }
 
 @layer base {
@@ -50,21 +46,20 @@
 		color: var(--color-liibra-ink);
 	}
 
+	/* Monochrome links: the underline, not a color, says "clickable". */
 	a {
-		color: var(--color-liibra-link);
-		text-decoration: none;
+		color: var(--color-liibra-ink);
+		text-decoration: underline;
+		text-decoration-color: var(--color-liibra-muted);
+		text-underline-offset: 3px;
 	}
 
 	a:hover {
-		text-decoration: underline;
-	}
-
-	a:visited {
-		color: var(--color-liibra-link-visited);
+		text-decoration-color: var(--color-liibra-ink);
 	}
 
 	:focus-visible {
-		outline: 2px solid var(--color-liibra-link);
+		outline: 2px solid var(--color-liibra-ink);
 		outline-offset: 2px;
 	}
 }

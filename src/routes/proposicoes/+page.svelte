@@ -63,7 +63,7 @@
 			placeholder={m.prop_search_placeholder}
 			autocomplete="off"
 			class="mt-1 w-full rounded-md border border-liibra-rule bg-white px-3 py-1.5 text-sm
-				text-liibra-ink placeholder:text-liibra-muted focus:border-liibra-link focus:outline-none"
+				text-liibra-ink placeholder:text-liibra-muted focus:border-liibra-ink focus:outline-none"
 		/>
 	</div>
 	<div>
@@ -72,7 +72,7 @@
 			id="tipo"
 			name="tipo"
 			class="mt-1 rounded-md border border-liibra-rule bg-white px-3 py-1.5 text-sm
-				focus:border-liibra-link focus:outline-none"
+				focus:border-liibra-ink focus:outline-none"
 		>
 			<option value="" selected={data.filters.siglaTipo === ''}>{m.prop_filter_all_types}</option>
 			{#each types as type (type)}
@@ -91,12 +91,12 @@
 			max="2100"
 			value={data.filters.ano}
 			class="mt-1 w-24 rounded-md border border-liibra-rule bg-white px-3 py-1.5 text-sm
-				focus:border-liibra-link focus:outline-none"
+				focus:border-liibra-ink focus:outline-none"
 		/>
 	</div>
 	<button
 		type="submit"
-		class="rounded-md bg-liibra-link px-4 py-1.5 text-sm font-medium text-white hover:opacity-90"
+		class="rounded-md bg-liibra-ink px-4 py-1.5 text-sm font-medium text-white hover:opacity-90"
 	>
 		{m.prop_filter_apply}
 	</button>

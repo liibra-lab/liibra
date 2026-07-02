@@ -15,12 +15,12 @@
 		placeholder={m.search_placeholder}
 		autocomplete="off"
 		class="min-w-0 flex-1 rounded-md border border-liibra-rule bg-white px-3 text-liibra-ink
-			placeholder:text-liibra-muted focus:border-liibra-link focus:outline-none
+			placeholder:text-liibra-muted focus:border-liibra-ink focus:outline-none
 			{variant === 'hero' ? 'py-3 text-lg' : 'py-1.5 text-sm'}"
 	/>
 	<button
 		type="submit"
-		class="shrink-0 rounded-md bg-liibra-link px-4 font-medium text-white hover:opacity-90
+		class="shrink-0 rounded-md bg-liibra-ink px-4 font-medium text-white hover:opacity-90
 			{variant === 'hero' ? 'py-3 text-base' : 'py-1.5 text-sm'}"
 	>
 		{m.search_submit}

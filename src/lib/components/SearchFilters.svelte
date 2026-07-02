@@ -91,7 +91,7 @@
 	<div class="mt-5 flex items-center gap-3">
 		<button
 			type="submit"
-			class="rounded-md bg-liibra-link px-4 py-1.5 font-medium text-white hover:opacity-90"
+			class="rounded-md bg-liibra-ink px-4 py-1.5 font-medium text-white hover:opacity-90"
 		>
 			{m.filter_apply}
 		</button>
