@@ -14,9 +14,9 @@
 	}: { m: Messages; locale: Locale; redirectTo: string; query?: string } = $props();
 </script>
 
-<header class="border-b border-liibra-rule bg-white">
+<header class="border-b border-liibra-rule border-t-4 border-t-liibra-accent bg-white">
 	<div class="mx-auto flex max-w-5xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
-		<a href={resolve('/')} class="flex items-center gap-2 font-serif text-2xl font-bold tracking-tight text-liibra-ink no-underline hover:no-underline">
+		<a href={resolve('/')} class="flex items-center gap-2 font-serif text-2xl font-semibold tracking-tight text-liibra-ink no-underline hover:no-underline">
 			<img src={liibraMark} alt="" class="h-8 w-auto" />
 			{m.brand}
 		</a>

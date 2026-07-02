@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="src/lib/assets/liibra-logo-white.svg">
+    <img src="src/lib/assets/liibra-logo.svg" width="200" alt="Liibra">
+  </picture>
+</p>
+
 # Liibra
 
 Liibra is a SvelteKit application for open access to Brazilian legal information.
@@ -66,6 +73,11 @@ Script summary:
 | `npm run build` | Build the Cloudflare Worker bundle. |
 | `npm run preview` | Serve the built Worker locally through Wrangler. |
 | `npm run deploy` | Deploy to Cloudflare Workers after `wrangler whoami`. |
+
+## Visual identity
+
+Logo assets, typography, and color tokens are documented in [`docs/BRAND.md`](docs/BRAND.md).
+The brand face (Fraunces, SIL OFL) is self-hosted; no third-party font CDN is used at runtime.
 
 ## Data sources
 

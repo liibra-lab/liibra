@@ -1,18 +1,37 @@
 @import 'tailwindcss';
 
-/* Design tokens — a Cornell LII–inspired, typography-first palette. Tailwind v4
-   generates utilities from these (font-serif, text-liibra-link, border-liibra-rule, …). */
+/* Brand display face — Fraunces (SIL OFL, see src/lib/assets/fonts/OFL.txt).
+   Self-hosted variable font, latin subset (covers Portuguese diacritics).
+   Used for the wordmark, headings, and document titles; body text stays on
+   the system sans stack. */
+@font-face {
+	font-family: 'Fraunces';
+	font-style: normal;
+	font-weight: 300 900;
+	font-display: swap;
+	src: url('../lib/assets/fonts/fraunces-latin-var.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+		U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+		U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Design tokens — the Liibra visual identity (see docs/BRAND.md). A
+   typography-first, Cornell LII–inspired system: ink on paper, one working
+   blue for links, and a brass accent drawn from the scales in the mark.
+   Tailwind v4 generates utilities from these (font-serif, text-liibra-link,
+   border-liibra-rule, …). */
 @theme {
-	--font-serif: Georgia, 'Times New Roman', serif;
+	--font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
 	--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
 	--color-liibra-link: #1a5fb4;
 	--color-liibra-link-visited: #6a3fa0;
-	--color-liibra-ink: #1a1a1a;
+	--color-liibra-ink: #1a1a1b;
 	--color-liibra-muted: #5a5a5a;
 	--color-liibra-rule: #e2e2e2;
 	--color-liibra-bg: #ffffff;
 	--color-liibra-surface: #f7f6f3;
+	--color-liibra-accent: #8a6d1f;
 }
 
 @layer base {
@@ -27,6 +46,7 @@
 	h2,
 	h3 {
 		font-family: var(--font-serif);
+		font-optical-sizing: auto;
 		color: var(--color-liibra-ink);
 	}
 
