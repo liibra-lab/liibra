@@ -19,10 +19,15 @@
 
 	<dt class="text-liibra-muted">{m.meta_source}</dt>
 	<dd>
-		<!-- external link to the canonical LexML record -->
+		<!-- external link to the canonical source record -->
 		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 		<a href={doc.source.url} target="_blank" rel="noopener noreferrer">
-			{m.source_view_on_lexml}
+			{doc.source.name}
 		</a>
+		{#if doc.source.note}
+			<p class="mt-1 text-xs text-liibra-muted">
+				{doc.source.note}{#if doc.source.capturedAt} ({m.meta_captured_at} {formatDate(locale, doc.source.capturedAt)}){/if}
+			</p>
+		{/if}
 	</dd>
 </dl>

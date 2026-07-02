@@ -25,6 +25,7 @@ export interface Messages {
 	meta_number: string;
 	meta_date: string;
 	meta_source: string;
+	meta_captured_at: string;
 	source_view_on_lexml: string;
 	lang_label: string;
 	lang_pt: string;
@@ -121,6 +122,7 @@ const pt: Messages = {
 	meta_number: 'Número',
 	meta_date: 'Data',
 	meta_source: 'Fonte',
+	meta_captured_at: 'capturado em',
 	source_view_on_lexml: 'Ver no LexML',
 	lang_label: 'Idioma',
 	lang_pt: 'Português',
@@ -219,6 +221,7 @@ const en: Messages = {
 	meta_number: 'Number',
 	meta_date: 'Date',
 	meta_source: 'Source',
+	meta_captured_at: 'captured on',
 	source_view_on_lexml: 'View on LexML',
 	lang_label: 'Language',
 	lang_pt: 'Português',

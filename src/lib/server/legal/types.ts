@@ -45,9 +45,14 @@ export interface LegalDocument {
 	articles: Article[];
 	/** Whether `articles` is the full document text or partial excerpts. */
 	coverage: LegalCoverage;
-	/** Provenance — always attributes the canonical LexML record. */
+	/** Provenance for the document's text. */
 	source: {
-		name: 'LexML';
+		/** Human-readable source name, e.g. "LexML" or "Planalto — …, texto compilado". */
+		name: string;
 		url: string;
+		/** ISO date the text was captured from the source (for compiled texts). */
+		capturedAt?: string;
+		/** Caveat shown alongside the source, e.g. amendment currency. */
+		note?: string;
 	};
 }
