@@ -5,6 +5,7 @@
 
 import type { LegalSearchParams, LegalSearchResponse, SearchSort } from '$lib/legal/search-types';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '$lib/legal/search-types';
+import { cachedFetch, EDGE_CACHE_TTL_SECONDS } from '$lib/server/edge-cache';
 import { buildCql, toStartRecord } from './cql';
 import { parseSruResponse } from './sru-parse';
 
@@ -82,11 +83,16 @@ export class LexmlSruSource {
 
 		let response: Response;
 		try {
-			response = await fetchImpl(url.toString(), {
-				headers: { Accept: 'application/xml' },
-				// Cloudflare edge cache; ignored on runtimes that don't support `cf`.
-				cf: { cacheTtl: 300, cacheEverything: true }
-			} as RequestInit);
+			// Served from the Cloudflare edge cache when possible; the `cf` hint is a
+			// second layer, ignored on runtimes that don't support it.
+			response = await cachedFetch(
+				url.toString(),
+				{
+					headers: { Accept: 'application/xml' },
+					cf: { cacheTtl: EDGE_CACHE_TTL_SECONDS, cacheEverything: true }
+				} as RequestInit,
+				fetchImpl
+			);
 		} catch (cause) {
 			console.error('LexML SRU network error:', cause);
 			return { ...empty, warnings: [...cqlWarnings, 'source_unavailable'] };
