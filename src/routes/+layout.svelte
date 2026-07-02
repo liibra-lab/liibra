@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './layout.css';
-	import favicon from '$lib/assets/liibra-mark.svg';
+	import favicon from '$lib/assets/liibra-favicon.svg';
 	import { page } from '$app/state';
 	import { t } from '$lib/i18n';
 	import Header from '$lib/components/Header.svelte';
