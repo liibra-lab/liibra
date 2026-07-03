@@ -1,0 +1,505 @@
+# attacksurface.ai
+# Public-safe machine-maintained attack-surface state for Liibra.
+# Do not store secrets, private IPs, account recovery data, personal mailbox targets, or physical-location details.
+
+schema_version: 1
+last_reviewed: 2026-07-03
+source_of_truth:
+  human_inventory: attacksurface.md
+  skill: .claude/skills/AttackSurface/SKILL.md
+  workflow: .claude/workflows/AssessAttackSurface.md
+status_terms:
+  - Verified
+  - Partially verified
+  - Needs verification
+  - Planned
+  - Decommissioned
+audience_terms:
+  - Public
+  - Public, no write path
+  - Public, token required
+  - OAuth required
+  - Internal LAN
+  - VPN-only
+  - Localhost only
+  - Maintainer-only
+  - Decommissioned
+asset_types:
+  - Web property
+  - API
+  - Database
+  - DNS
+  - Mail
+  - CI/CD
+  - Source control
+  - Endpoint
+  - Self-hosted service
+  - Dataset
+  - Admin UI
+frequency_policy:
+  Critical: Monthly, plus after every deployment/auth/DNS change.
+  High: Quarterly, plus after meaningful dependency/config changes.
+  Medium: Every 6 months, plus after exposure changes.
+  Low: Annually, or before publishing.
+  Decommissioned: Confirm removal once per quarter until cleared from DNS, secrets, webhooks, and docs.
+
+surfaces:
+  - id: AS-001
+    name: GitHub organization and repositories
+    status: Partially verified
+    criticality: Critical
+    type:
+      - Source control
+      - CI/CD
+      - Supply chain
+    hosting_model: Third-party SaaS
+    deployed:
+      - liibra-lab/liibra
+      - liibra-lab/dark-liibra
+      - GitHub Actions for liibra
+      - Dependabot for liibra
+      - CODEOWNERS for liibra
+      - SECURITY.md for liibra
+    auth_into_platform:
+      - GitHub account/OAuth
+      - Repository admin/write permissions
+      - GitHub Actions repository token at runtime
+    runtime_access:
+      - Public repositories
+      - Maintainer-only write/admin
+    controls_verified:
+      - liibra CI permissions: contents: read
+      - Dependabot weekly npm and GitHub Actions updates
+      - CODEOWNERS for governance/deployment/package/server paths
+      - Private vulnerability reporting policy
+    common_issues:
+      - Overprivileged Actions token
+      - Secrets available to untrusted PR code
+      - Missing main branch ruleset
+      - Stale deploy secrets from retired vendors
+      - Unpinned or unreviewed workflow changes
+    verify_next:
+      - Branch protection/ruleset for main
+      - Secret scanning and push protection
+      - Actions secrets inventory
+      - Org/account MFA
+    testing_frequency: Monthly + every workflow/permission change
+
+  - id: AS-002
+    name: Liibra public website
+    status: Partially verified
+    criticality: High
+    type:
+      - Web property
+      - Edge compute
+    hosting_model: Third-party edge compute
+    deployed:
+      - liibra.com.br SvelteKit application
+      - Cloudflare Worker bundle
+      - Static assets
+      - Public legal search/proposition routes
+    tech:
+      - SvelteKit
+      - Vite
+      - TypeScript
+      - Tailwind CSS v4
+      - Cloudflare Workers
+      - '@sveltejs/adapter-cloudflare'
+    auth_into_platform:
+      - Cloudflare account
+      - Wrangler API token/account binding
+    runtime_access:
+      - Public, no write path
+    controls_verified:
+      - workers_dev disabled
+      - preview_urls disabled
+      - Baseline response headers in src/hooks.server.ts
+      - Server-only network boundary
+      - Quality gate: check, lint, tests, build
+    common_issues:
+      - Missing CSP/HSTS
+      - Accidental workers.dev or preview URL exposure
+      - Broad Cloudflare deploy token
+      - Cache poisoning
+      - Analytics script/CSP conflicts
+    verify_next:
+      - Live route bindings
+      - HTTPS redirect and HSTS
+      - CSP compatibility
+      - WAF/rate-limit need
+    testing_frequency: Quarterly + every deploy/routing change
+
+  - id: AS-003
+    name: Liibra server-side API integrations
+    status: Verified from repo, runtime still needs verification
+    criticality: High
+    type:
+      - API dependency
+      - Data ingestion
+    hosting_model: Third-party public APIs consumed by Worker
+    deployed:
+      - LexML SRU client
+      - Câmara Dados Abertos client
+      - Edge cache wrapper
+    tech:
+      - LexML SRU XML
+      - Câmara Dados Abertos JSON
+      - Cloudflare edge cache
+      - fast-xml-parser
+    auth_into_platform:
+      - No upstream credentials documented
+      - Cloudflare deploy credentials for Worker
+    runtime_access:
+      - Public website triggers server-side egress
+      - Upstream APIs are public
+    controls_verified:
+      - Fixed upstream base URLs
+      - Whitelisted CQL indexes
+      - Escaped CQL values
+      - Page-size cap
+      - Safe warnings/errors for upstream failures
+      - Cache only ok responses
+    common_issues:
+      - SSRF from arbitrary URL support
+      - CQL injection
+      - XML parser abuse or oversized payloads
+      - Upstream outage or latency
+      - Incorrect legal source attribution
+    verify_next:
+      - SRU explain contract
+      - Live fixtures
+      - Observability for upstream failure/cache rate
+    testing_frequency: Quarterly + every data-source change
+
+  - id: AS-004
+    name: Cloudflare zone and edge controls
+    status: Needs verification
+    criticality: Critical
+    type:
+      - DNS
+      - CDN
+      - Edge security
+      - Mail routing
+    hosting_model: Third-party SaaS
+    deployed:
+      - liibra.com.br zone
+      - Worker routes
+      - HTTPS/www redirect rules
+      - Cloudflare Email Routing
+      - Cloudflare Web Analytics/RUM
+      - Future WAF/rate limits
+    auth_into_platform:
+      - Cloudflare account
+      - Scoped API tokens
+    runtime_access:
+      - Public DNS/web
+      - Maintainer-only admin
+    controls_verified:
+      - Worker config disables workers.dev and preview URLs
+    common_issues:
+      - Stale DNS to retired vendor
+      - Broad API tokens
+      - Weak email authentication
+      - Analytics/CSP/SRI conflict
+      - Route mismatch between apex/www/subdomains
+    verify_next:
+      - DNS records
+      - Route bindings
+      - SSL/TLS mode and HSTS
+      - Email routing and TXT records
+      - Token scopes
+    testing_frequency: Monthly + every DNS/mail/route change
+
+  - id: AS-005
+    name: dark-liibra browser game
+    status: Partially verified from repo only
+    criticality: Medium until public, High once public
+    type:
+      - Web property
+      - Game client
+    hosting_model: Third-party or static host; current host not verified
+    deployed:
+      - Browser RPG prototype
+      - Next.js/React/Phaser client
+      - Vercel Analytics/Speed Insights package dependencies
+    auth_into_platform:
+      - Hosting vendor account; not verified
+      - GitHub repo write access
+    runtime_access:
+      - Unknown until deployment is verified
+    controls_verified: []
+    common_issues:
+      - Stale dependency exposure
+      - No CI/security headers
+      - Analytics/privacy/CSP mismatch
+      - Future leaderboard/account/database risks
+      - Ambiguous deployment model
+    verify_next:
+      - Current deployment host
+      - CI/audit setup
+      - Final route: dark.liibra.com.br or /dark
+      - Remove Vercel deps if unused
+    testing_frequency: Every 6 months; quarterly once public
+
+  - id: AS-006
+    name: Legacy or stale Vercel surface
+    status: Needs verification
+    criticality: Medium
+    type:
+      - Web hosting
+      - Analytics
+      - OAuth integration
+    hosting_model: Third-party SaaS
+    deployed:
+      - Previous Vercel projects or deployments, if still present
+      - Possible GitHub integration and env vars
+    auth_into_platform:
+      - Vercel account/OAuth/GitHub integration
+    runtime_access:
+      - Should be decommissioned unless intentionally retained
+    controls_verified: []
+    common_issues:
+      - Stale deployment still reachable
+      - Stale env vars/secrets
+      - Retired GitHub webhooks or OAuth grants
+      - DNS still pointing to old vendor
+    verify_next:
+      - Vercel project list
+      - GitHub app/webhook access
+      - Env var cleanup
+      - DNS cleanup
+    testing_frequency: Quarterly until removed/confirmed clean
+
+  - id: AS-007
+    name: Domain email forwarding
+    status: Needs verification
+    criticality: High
+    type:
+      - Mail
+      - DNS
+    hosting_model: Third-party SaaS
+    deployed:
+      - Cloudflare Email Routing
+      - MX/TXT anti-spoofing records
+      - Private mailbox forwarding target, not recorded here
+    auth_into_platform:
+      - Cloudflare account
+      - Destination mailbox account
+    runtime_access:
+      - Public mail receiving surface
+      - Maintainer-only admin
+    controls_verified: []
+    common_issues:
+      - Missing MX
+      - Weak SPF/DKIM/DMARC
+      - Forwarding target leakage
+      - Destination mailbox compromise
+    verify_next:
+      - MX
+      - SPF
+      - DKIM
+      - DMARC policy and reporting
+    testing_frequency: Quarterly + every DNS/mail change
+
+  - id: AS-008
+    name: Personal LAN server
+    status: Needs verification
+    criticality: High
+    type:
+      - Self-hosted service
+      - Endpoint
+      - Admin host
+    hosting_model: Self-hosted private LAN
+    deployed:
+      - Ubuntu server
+      - SSH administration
+      - Pi-hole/DNS role
+      - Planned file/media/backup/VPN/local dashboard roles
+    auth_into_platform:
+      - SSH keys
+      - Local sudo
+      - Service-specific admin passwords
+      - Tailscale identity if enabled
+    runtime_access:
+      - Internal LAN
+      - VPN-only if Tailscale is configured
+    controls_verified: []
+    common_issues:
+      - SSH reachable from WAN
+      - Password/root login enabled
+      - Firewall allows admin/DNS ports too broadly
+      - IPv6 bypass
+      - Unpatched OS or containers
+    verify_next:
+      - SSH config
+      - UFW IPv4/IPv6
+      - Router port forwards/DMZ
+      - Updates/backups/monitoring
+    testing_frequency: Quarterly; monthly if any public/VPN exposure exists
+
+  - id: AS-009
+    name: Pi-hole and local DNS resolver
+    status: Needs verification
+    criticality: High
+    type:
+      - DNS
+      - Admin UI
+      - Self-hosted service
+    hosting_model: Self-hosted private LAN
+    deployed:
+      - Pi-hole FTL
+      - Pi-hole admin UI
+      - Optional Unbound recursive resolver
+    auth_into_platform:
+      - Pi-hole admin password
+      - SSH/local sudo
+    runtime_access:
+      - Internal LAN only; never public
+    controls_verified: []
+    common_issues:
+      - Open resolver exposed to Internet
+      - Admin UI exposed without VPN
+      - IPv6 DNS bypass
+      - DNS rebinding conflict
+      - NTP/system-time failures affecting DNSSEC/logs
+    verify_next:
+      - DNS/admin ports LAN-only on IPv4/IPv6
+      - Router DNS advertisement
+      - NTP/system time
+      - Admin password strength
+    testing_frequency: Quarterly + every firewall/router change
+
+  - id: AS-010
+    name: Local AI stack
+    status: Needs verification
+    criticality: Medium
+    type:
+      - API
+      - Admin UI
+      - Local compute
+    hosting_model: Self-hosted/local containers
+    deployed:
+      - Ollama container/API
+      - Open WebUI planned/partially deployed
+      - Agent tooling planned
+    auth_into_platform:
+      - OS login
+      - Container access
+      - WebUI auth if enabled
+    runtime_access:
+      - Localhost only
+      - Internal LAN or VPN-only only if intentionally exposed
+    controls_verified: []
+    common_issues:
+      - Unauthenticated model API reachable from LAN/WAN
+      - Open WebUI exposed without strong auth
+      - Tool agents given broad shell/GitHub/API access
+      - Prompt logs containing secrets
+      - Overprivileged containers/mounts
+    verify_next:
+      - Bind addresses
+      - Firewall rules
+      - WebUI auth/registration
+      - Container privileges/mounts
+    testing_frequency: Every 6 months + every exposure/tooling change
+
+  - id: AS-011
+    name: Developer workstation
+    status: Needs verification
+    criticality: Critical
+    type:
+      - Endpoint
+      - Secret storage
+      - Admin console
+    hosting_model: Self-managed endpoint
+    deployed:
+      - Fedora workstation
+      - Git/SSH keys
+      - GitHub and Cloudflare CLI/browser sessions
+      - Local env files and containers
+    auth_into_platform:
+      - OS login
+      - SSH agent
+      - Browser sessions
+      - CLI tokens
+    runtime_access:
+      - Local physical/user boundary
+    controls_verified: []
+    common_issues:
+      - Broad long-lived API tokens
+      - Private keys without passphrases
+      - Secrets in shell history/dotfiles
+      - Browser session compromise
+      - Local agents reading sensitive directories
+    verify_next:
+      - Local token inventory, without publishing secrets
+      - Disk encryption/screen lock
+      - SSH key hygiene
+      - CLI token scopes
+    testing_frequency: Monthly checklist; after compromise suspicion
+
+  - id: AS-012
+    name: External data and storage sources
+    status: Planned/needs verification
+    criticality: Medium
+    type:
+      - Dataset
+      - Data ingestion
+      - Storage
+    hosting_model: Third-party source plus local/cloud storage
+    deployed:
+      - Kaggle LexML dataset under consideration
+      - Future dados.gov.br/Senado ingestion
+      - Possible local or cloud corpus storage
+    auth_into_platform:
+      - Kaggle account/token if CLI used
+      - Public API access unless new credentials are introduced
+    runtime_access:
+      - Offline/internal until published
+    controls_verified: []
+    common_issues:
+      - Treating copies as authoritative without attribution
+      - Publishing stale/corrupt legal text
+      - Public bucket exposure
+      - Kaggle credential leakage
+    verify_next:
+      - Storage location/access policy
+      - Dataset license/source/update cadence
+      - Checksums/provenance
+    testing_frequency: Every 6 months + before publication/ingestion automation
+
+  - id: AS-013
+    name: Future Cloudflare data plane
+    status: Planned
+    criticality: Critical once deployed
+    type:
+      - Database
+      - Object storage
+      - Scheduled jobs
+      - API
+    hosting_model: Third-party edge data services
+    deployed:
+      - Planned D1/KV/R2/Cron/Queues
+    auth_into_platform:
+      - Cloudflare account/API token
+      - Worker bindings
+    runtime_access:
+      - Public reads through Worker once deployed
+      - Maintainer/job-only writes
+    controls_verified: []
+    common_issues:
+      - Public bucket/object exposure
+      - Corrupt scheduled writes
+      - No backup/restore path
+      - Direct storage exposure bypassing Worker
+      - Missing migration discipline
+    verify_next:
+      - Data classification
+      - Binding access model
+      - Backup/export/restore
+      - Migration and validation process
+    testing_frequency: Monthly once production data exists
+
+change_log:
+  - date: 2026-07-03
+    change: Initial public-safe attack-surface inventory and machine-maintained state created.

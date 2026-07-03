@@ -12,6 +12,12 @@ wrangler.jsonc @liibra-lab
 package.json @liibra-lab
 package-lock.json @liibra-lab
 
+# Security inventory and agent security workflow.
+attacksurface.md @liibra-lab
+attacksurface.ai @liibra-lab
+.claude/skills/AttackSurface/ @liibra-lab
+.claude/workflows/AssessAttackSurface.md @liibra-lab
+
 # Server-side request handling and external data clients.
 src/hooks.server.ts @liibra-lab
 src/lib/server/ @liibra-lab

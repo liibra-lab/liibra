@@ -12,6 +12,10 @@ summary:
   substantive work.
 - **`ROADMAP.md`** — the plan of record: current state and phased goals.
 - **`docs/BRAND.md`** — visual identity: logo, typography, and color rules.
+- **`attacksurface.md`** and **`attacksurface.ai`** — public-safe security
+  inventory. When deployment, hosting, DNS, mail, CI/CD, external APIs,
+  databases, storage, self-hosted services, local AI tooling, or exposure
+  changes, use `.claude/skills/AttackSurface/SKILL.md` and update both files.
 
 ## Quality gate — run before every push
 
@@ -27,3 +31,6 @@ CI enforces the same steps. Dependencies install from the committed
 - The `src/lib/server/` network boundary is lint-enforced
   (`eslint.config.js`); when the rule trips, fix the layering — don't
   disable the rule.
+- `.github/CODEOWNERS` marks governance, deployment, and `src/lib/server/`
+  paths as owner-reviewed; expect PR review on changes there.
+- Keep the public security inventory free of sensitive operational details.
