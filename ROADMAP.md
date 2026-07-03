@@ -9,6 +9,12 @@ LexML URN and XML standards as the backbone.
 This document records where the repository stands today and the plan to get from
 "metadata search + seeded excerpts" to "full primary-source legal text".
 
+How to read it: phase **goals** and their acceptance criteria are binding.
+Named **mechanisms** — storage splits (KV/D1/R2), refresh designs, rendering
+techniques, even the phase ordering — are the best guess at the time of
+writing; decide them at implementation time, preferring the simplest design
+that satisfies [`docs/PRINCIPLES.md`](docs/PRINCIPLES.md).
+
 ## Where the repository stands (review summary, 2026-07)
 
 ### What is working well
@@ -67,8 +73,8 @@ by them.
 - [ ] Ship the planned hardening: tested CSP + HSTS in `hooks.server.ts`,
       SHA-pinned GitHub Actions, branch ruleset for `main`.
 - [ ] Add CONTRIBUTING.md and issue templates.
-- [ ] Add Playwright smoke tests (home, `/search`, `/doc`, `/proposicoes`)
-      running against `wrangler dev` in CI.
+- [x] Add Playwright smoke tests (home, `/search`, `/doc`, `/proposicoes`)
+      running against `wrangler dev` in CI (`e2e/smoke.spec.ts`).
 
 ## Phase 1 — Unify search and document resolution
 
@@ -77,6 +83,11 @@ Goal: any URN discoverable in `/search` renders inside Liibra.
 - [ ] Verify the SRU contract: capture `explain` output, confirm index names,
       probe `sortKeys` support (SRU 1.2) to replace page-only sorting.
 - [ ] Add fixtures from live SRU responses to the parse test suite.
+      The apparatus for both items is in place: `npm run gen:sru-fixtures`
+      captures and validates `explain` plus searchRetrieve samples into
+      `tests/fixtures/sru/`, and `tests/sru-fixtures.test.ts` asserts the
+      contract against whatever is committed there. Run the capture from a
+      network that can reach lexml.gov.br (sandboxed sessions are blocked).
 - [ ] Implement URN → document metadata resolution via SRU
       (`urn="..."` query) so `/doc/[...urn]` works for any LexML record:
       metadata header + official links first, full text later (Phase 2).
