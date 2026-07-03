@@ -9,6 +9,12 @@ LexML URN and XML standards as the backbone.
 This document records where the repository stands today and the plan to get from
 "metadata search + seeded excerpts" to "full primary-source legal text".
 
+How to read it: phase **goals** and their acceptance criteria are binding.
+Named **mechanisms** — storage splits (KV/D1/R2), refresh designs, rendering
+techniques, even the phase ordering — are the best guess at the time of
+writing; decide them at implementation time, preferring the simplest design
+that satisfies [`docs/PRINCIPLES.md`](docs/PRINCIPLES.md).
+
 ## Where the repository stands (review summary, 2026-07)
 
 ### What is working well
