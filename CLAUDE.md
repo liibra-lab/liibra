@@ -27,5 +27,3 @@ CI enforces the same steps. Dependencies install from the committed
 - The `src/lib/server/` network boundary is lint-enforced
   (`eslint.config.js`); when the rule trips, fix the layering — don't
   disable the rule.
-- `.github/CODEOWNERS` marks governance, deployment, and `src/lib/server/`
-  paths as owner-reviewed; expect PR review on changes there.

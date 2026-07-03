@@ -154,7 +154,8 @@ vite.config.ts         Vite, SvelteKit, Tailwind, and Cloudflare adapter config
 Already present:
 
 - GitHub Actions uses read-only repository contents permission.
-- CI runs install, audit, type/check, lint, tests, and build.
+- CI (`.github/workflows/ci.yml`) runs a dependency audit, the full quality
+  gate, and the Playwright smoke tests.
 - Worker preview URLs and `workers.dev` exposure are disabled in Wrangler config.
 - Baseline headers are applied from `src/hooks.server.ts`.
 - External legal data requests are centralized in server-only modules.
