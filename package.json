@@ -14,6 +14,7 @@
 		"gen:constituicao": "node --experimental-strip-types scripts/fetch-constituicao-planalto.ts",
 		"test": "node --experimental-strip-types --import ./tests/register-ts.mjs --test 'tests/**/*.test.ts'",
 		"lint": "eslint .",
+		"gate": "npm run check && npm run lint && npm test && npm run build",
 		"predeploy": "wrangler whoami",
 		"deploy": "wrangler deploy"
 	},

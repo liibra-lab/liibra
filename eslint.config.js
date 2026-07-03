@@ -33,6 +33,25 @@ export default defineConfig(
 		}
 	},
 	{
+		// docs/PRINCIPLES.md architecture invariant, machine-enforced: upstream
+		// network access lives only in src/lib/server/. Outside it, use the
+		// `fetch` SvelteKit injects into load events and pass it down to a
+		// source — never the global. Fix the layering when this trips; don't
+		// disable the rule.
+		files: ['src/**/*.js', 'src/**/*.ts', 'src/**/*.svelte'],
+		ignores: ['src/lib/server/**'],
+		rules: {
+			'no-restricted-globals': [
+				'error',
+				{
+					name: 'fetch',
+					message:
+						"Network access lives only in src/lib/server/ (docs/PRINCIPLES.md): pass the load event's injected fetch to a source instead."
+				}
+			]
+		}
+	},
+	{
 		// Override or add rule settings here, such as:
 		// 'svelte/button-has-type': 'error'
 		rules: {}

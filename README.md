@@ -18,14 +18,10 @@ Current scope:
 
 - Search Brazilian legal documents through LexML SRU.
 - Browse legislative propositions from the Chamber of Deputies Open Data API.
-- Preserve source attribution and official links for verification.
-- Keep legal source text in Portuguese; interface chrome may be localized.
 
-Out of scope for this repository:
-
-- Long-running Node server deployment.
-- Private legal advice or automated legal conclusions.
-- Storage of Cloudflare credentials or other secrets.
+The project's standing rules — product principles, architecture invariants,
+the language rule, and non-goals — live in
+[`docs/PRINCIPLES.md`](docs/PRINCIPLES.md).
 
 ## Stack
 
@@ -46,9 +42,12 @@ Out of scope for this repository:
 ## Development
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
+
+`npm ci` installs exactly what the committed `package-lock.json` describes;
+the lockfile is the source of truth.
 
 Local development uses the Vite dev server.
 
@@ -57,16 +56,14 @@ Local development uses the Vite dev server.
 Run the full local gate before opening a pull request or deploying:
 
 ```sh
-npm run check
-npm run lint
-npm test
-npm run build
+npm run gate
 ```
 
 Script summary:
 
 | Script | Purpose |
 | --- | --- |
+| `npm run gate` | The full pre-push gate: check, lint, test, and build in sequence. |
 | `npm run check` | Generate/check Wrangler types, sync SvelteKit, and run `svelte-check`. |
 | `npm run lint` | Run ESLint. |
 | `npm test` | Run Node's built-in test runner against `tests/**/*.test.ts`. |
@@ -129,8 +126,10 @@ This repository intentionally keeps generated and sensitive material out of git:
 ## Project layout
 
 ```text
-CLAUDE.md              Agent guide: quality gate and project invariants
+CLAUDE.md              Agent guide: quality gate and pointers to the owning docs
 .claude/               Claude Code project hooks and settings
+docs/PRINCIPLES.md     Standing rules: principles, invariants, non-goals
+docs/BRAND.md          Visual identity: logo, typography, color
 .github/CODEOWNERS     Code owner rules for sensitive paths
 .github/dependabot.yml Dependency update automation
 .github/workflows/     CI workflow

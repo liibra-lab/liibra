@@ -53,14 +53,10 @@ This document records where the repository stands today and the plan to get from
 
 ## Guiding principles
 
-1. **Primary source or nothing.** Text comes from official endpoints; every
-   page keeps attribution and a verification link.
-2. **URN-addressed.** The LexML URN (`urn:lex:br:...`) is the canonical
-   identifier for every document, route, and citation.
-3. **Honest presentation.** Partial coverage, per-page sorting, and upstream
-   failures are surfaced to the reader, never hidden.
-4. **Edge-first.** Cloudflare Workers is the only runtime; storage and
-   scheduling use Workers primitives (KV, D1, R2, Cron Triggers).
+The guiding principles matured from review notes into standing rules and now
+live in [`docs/PRINCIPLES.md`](docs/PRINCIPLES.md), the single owner of the
+project's principles, invariants, and non-goals. The phases below are ordered
+by them.
 
 ## Phase 0 — Foundation hygiene (short term)
 
@@ -162,12 +158,8 @@ Goal: the features that made LII indispensable.
       workflow (legal text always stays in Portuguese).
 - [ ] Public roadmap issues + good-first-issue labels to grow contributors.
 
-## Non-goals (unchanged)
+## Non-goals
 
-- Legal advice or automated legal conclusions.
-- Long-running Node server deployments.
-- Scraping where an official API or XML source exists. The one sanctioned
-  exception is `scripts/fetch-constituicao-planalto.ts`: a curated, one-off
-  seed generator for the compiled 1988 Constitution, which has no official
-  XML endpoint. It runs offline at development time — never in the Worker —
-  and is not precedent for scraping other sources.
+Non-goals — including the one sanctioned scraping exception
+(`scripts/fetch-constituicao-planalto.ts`) — live in
+[`docs/PRINCIPLES.md`](docs/PRINCIPLES.md).

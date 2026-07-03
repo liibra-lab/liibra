@@ -1,7 +1,7 @@
 #!/bin/bash
 # SessionStart hook: make the quality gate runnable in Claude Code on the web.
-# Installs npm dependencies from the committed lockfile so `npm run check`,
-# `npm run lint`, `npm test`, and `npm run build` work from the first turn.
+# Installs npm dependencies from the committed lockfile so `npm run gate`
+# works from the first turn.
 set -euo pipefail
 
 # Web sessions only; local sessions manage their own node_modules.
