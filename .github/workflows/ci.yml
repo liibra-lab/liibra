@@ -28,6 +28,8 @@ jobs:
       - name: Audit dependencies
         run: npm audit --audit-level=critical
 
+      # The next four steps are `npm run gate`, split up so a failure names
+      # its step in the Actions UI.
       - name: Check
         run: npm run check
 
