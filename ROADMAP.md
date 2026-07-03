@@ -166,4 +166,8 @@ Goal: the features that made LII indispensable.
 
 - Legal advice or automated legal conclusions.
 - Long-running Node server deployments.
-- Scraping where an official API or XML source exists.
+- Scraping where an official API or XML source exists. The one sanctioned
+  exception is `scripts/fetch-constituicao-planalto.ts`: a curated, one-off
+  seed generator for the compiled 1988 Constitution, which has no official
+  XML endpoint. It runs offline at development time — never in the Worker —
+  and is not precedent for scraping other sources.
