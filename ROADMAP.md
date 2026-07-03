@@ -77,6 +77,11 @@ Goal: any URN discoverable in `/search` renders inside Liibra.
 - [ ] Verify the SRU contract: capture `explain` output, confirm index names,
       probe `sortKeys` support (SRU 1.2) to replace page-only sorting.
 - [ ] Add fixtures from live SRU responses to the parse test suite.
+      The apparatus for both items is in place: `npm run gen:sru-fixtures`
+      captures and validates `explain` plus searchRetrieve samples into
+      `tests/fixtures/sru/`, and `tests/sru-fixtures.test.ts` asserts the
+      contract against whatever is committed there. Run the capture from a
+      network that can reach lexml.gov.br (sandboxed sessions are blocked).
 - [ ] Implement URN → document metadata resolution via SRU
       (`urn="..."` query) so `/doc/[...urn]` works for any LexML record:
       metadata header + official links first, full text later (Phase 2).

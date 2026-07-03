@@ -56,7 +56,14 @@ function applyPageSort(response: LegalSearchResponse, sort: SearchSort): LegalSe
 }
 
 export class LexmlSruSource {
-	constructor(private readonly endpoint: string = LEXML_SRU_ENDPOINT) {}
+	// Assigned in the body (not a parameter property) so the module loads under
+	// Node's strip-only TypeScript mode, which the test runner and the fixture
+	// capture script use.
+	private readonly endpoint: string;
+
+	constructor(endpoint: string = LEXML_SRU_ENDPOINT) {
+		this.endpoint = endpoint;
+	}
 
 	async search(params: LegalSearchParams, fetchImpl: FetchLike): Promise<LegalSearchResponse> {
 		const page = clampPage(params.page);
