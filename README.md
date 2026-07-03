@@ -129,6 +129,8 @@ This repository intentionally keeps generated and sensitive material out of git:
 ## Project layout
 
 ```text
+CLAUDE.md              Agent guide: quality gate and project invariants
+.claude/               Claude Code project hooks and settings
 .github/CODEOWNERS     Code owner rules for sensitive paths
 .github/dependabot.yml Dependency update automation
 .github/workflows/     CI workflow
@@ -157,11 +159,9 @@ Already present:
 - `CODEOWNERS` marks repository governance, deployment, package, and server-side files as owner-reviewed paths.
 - `SECURITY.md` defines private vulnerability reporting.
 
-Planned next hardening:
-
-- Branch ruleset for `main`.
-- Tested CSP and HSTS headers.
-- GitHub Actions pinned to full commit SHAs.
+Planned hardening is tracked in [`ROADMAP.md`](ROADMAP.md) (Phase 0). The
+roadmap is the single source of truth for planned work; this section only
+describes what is already in place.
 
 ## Legal/source disclaimer
 

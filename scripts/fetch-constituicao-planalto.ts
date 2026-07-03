@@ -14,6 +14,13 @@
 // must be dropped; only revoked-article headers (followed by "(Revogado…)") are
 // kept. After running, update `capturedAt` in src/lib/server/legal/seed-data.ts
 // and re-check the article count and the latest Emenda Constitucional reflected.
+//
+// This script is the repository's ONE sanctioned exception to the ROADMAP
+// non-goal "no scraping where an official API or XML source exists": the
+// compiled constitutional text has no official XML endpoint, the script runs
+// offline at development time (never in the Worker), and its output is a
+// curated seed with full source attribution. Do not treat it as precedent for
+// scraping other sources.
 
 import { readFile, writeFile } from 'node:fs/promises';
 
