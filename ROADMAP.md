@@ -67,8 +67,8 @@ by them.
 - [ ] Ship the planned hardening: tested CSP + HSTS in `hooks.server.ts`,
       SHA-pinned GitHub Actions, branch ruleset for `main`.
 - [ ] Add CONTRIBUTING.md and issue templates.
-- [ ] Add Playwright smoke tests (home, `/search`, `/doc`, `/proposicoes`)
-      running against `wrangler dev` in CI.
+- [x] Add Playwright smoke tests (home, `/search`, `/doc`, `/proposicoes`)
+      running against `wrangler dev` in CI (`e2e/smoke.spec.ts`).
 
 ## Phase 1 — Unify search and document resolution
 

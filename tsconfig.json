@@ -3,7 +3,11 @@
 	"compilerOptions": {
 		"rewriteRelativeImportExtensions": true,
 		"allowJs": true,
-		"checkJs": true,
+		// checkJs stays off: the generated worker-configuration.d.ts imports the
+		// built Worker bundle (typeof import) when it exists, and checkJs would
+		// type-check that generated JS. Authored code is TS/Svelte; ESLint still
+		// lints the JS config files.
+		"checkJs": false,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
