@@ -30,11 +30,14 @@ through `src/lib/i18n/` (pt-BR/en).
   never fetch upstream sources directly; they depend on interfaces
   (`LegalSource`, `PropositionSource`) wired in the composition roots
   (`src/lib/server/legal/index.ts`, `src/lib/server/camara/index.ts`) and
-  pass SvelteKit's injected `fetch` down to them.
+  pass SvelteKit's injected `fetch` down to them. Enforced by ESLint
+  (`no-restricted-globals: fetch` outside `src/lib/server/` in
+  `eslint.config.js`).
 - **Parsing is pure and fixture-tested.** Upstream XML/JSON parsing never
   throws to the page; failures become typed warnings the UI renders honestly.
   Tests use Node's built-in runner (`tests/**/*.test.ts`); add fixtures for
-  any new upstream response shape you parse.
+  any new upstream response shape you parse, and register new parsers in
+  `tests/parse-contract.test.ts`, the executable form of this invariant.
 - **Defensive upstream integration.** Whitelist query fields, escape user
   values, cap page sizes, convert upstream failures into typed errors.
 
