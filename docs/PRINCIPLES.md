@@ -41,9 +41,6 @@ through `src/lib/i18n/` (pt-BR/en).
 - **Defensive upstream integration.** Whitelist query fields, escape user
   values, cap page sizes, convert upstream failures into typed errors.
 
-Where an invariant can be checked by machine, the check — not this prose — is
-the enforcement; this file explains intent.
-
 ## Non-goals
 
 - **No legal advice** or automated legal conclusions.
@@ -60,3 +57,19 @@ the enforcement; this file explains intent.
 [`BRAND.md`](BRAND.md) owns all visual rules, including the two normative
 color roles (functional blue, decorative brass) and the typography split
 (Fraunces for headings, system sans for body and chrome).
+
+## Harness rules
+
+The harness around the code — CLAUDE.md, this file, hooks, lint, CI — stays
+small by ratchet, not by cleanup sprints:
+
+1. **Invariants become checks.** A rule worth enforcing gets a lint rule, a
+   test, or a CI step; prose explains intent, the check is the enforcement.
+   What cannot be checked is either a value (state it here) or not an
+   invariant.
+2. **One owner per fact.** Every standing rule lives in exactly one document;
+   everything else points to the owner. Restating is how copies drift.
+3. **The deletion test.** Before adding an instruction, workflow, or tool,
+   ask whether it would still earn its place if the model or contributor
+   using it were ten times more capable. Anything that only routes around a
+   current weakness gets a dated comment and is expected to be deleted.
