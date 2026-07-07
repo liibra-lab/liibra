@@ -135,6 +135,10 @@ Use the status terms exactly:
   `/docs/api` documentation page, and `/docs/api/openapi.json`. All public,
   read-only, and served from pure/static code with no upstream egress and
   no authentication metadata.
+- `robots.txt` policy (advisory, not an access control): AI
+  training/scraping crawlers disallowed; user-triggered agent fetchers and
+  AI search indexers from OpenAI/Anthropic allowed. Owned by
+  `docs/AGENT-DISCOVERY.md`, pinned by `tests/robots.test.ts`.
 
 **Authentication and authorization**
 

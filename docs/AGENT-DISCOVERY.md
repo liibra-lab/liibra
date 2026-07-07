@@ -61,11 +61,22 @@ capability itself landing first:
   URL-addressed, so there are no in-page tools to expose yet. Revisit when
   the API stabilizes.
 
-## Open policy question — robots.txt vs. interactive agents
+## robots.txt policy — training crawlers vs. interactive agents
 
-`static/robots.txt` disallows AI training/scraping crawlers, including some
-user-triggered agent fetchers (`ChatGPT-User`, `Claude-Web`). That policy
-partly conflicts with publishing agent-discovery metadata: interactive
-agents acting for a user are not training crawlers. Whether to distinguish
-the two classes in robots.txt is a maintainer decision; this file only
-records the tension so it isn't resolved by accident.
+Decided 2026-07-07: `static/robots.txt` distinguishes the two classes.
+
+- **Allowed** — user-triggered agent fetchers and AI search indexers from
+  OpenAI and Anthropic (`ChatGPT-User`, `OAI-SearchBot`, `Claude-User`,
+  `Claude-Web`, `Claude-SearchBot`). They act on behalf of a user asking
+  about Brazilian law, which is exactly what the agent-discovery surface
+  above exists for.
+- **Disallowed** — training/scraping crawlers (`GPTBot`, `ClaudeBot`,
+  `anthropic-ai`, `CCBot`, `Google-Extended`, `PerplexityBot`,
+  `Applebot-Extended`, `Bytespider`, `Amazonbot`, `Meta-ExternalAgent`).
+
+Security posture is unchanged: robots.txt is advisory, and the whole site
+is public and read-only regardless — it was never an access control. The
+operational consideration is upstream load (agent-driven hits on `/search`
+fan out to LexML/Câmara), which is already tracked as the WAF/rate-limit
+gap under AS-002/AS-003 in the attack-surface inventory. The policy is
+pinned by `tests/robots.test.ts`; change that test and this file together.

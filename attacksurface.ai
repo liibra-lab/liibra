@@ -99,6 +99,7 @@ surfaces:
       - Static assets
       - Public legal search/proposition routes
       - Agent-discovery endpoints: /.well-known/api-catalog, /docs/api, /docs/api/openapi.json (public, read-only; see docs/AGENT-DISCOVERY.md)
+      - robots.txt policy: AI training/scraping crawlers disallowed; user-triggered agent fetchers and AI search indexers from OpenAI/Anthropic allowed (advisory only, not an access control; pinned by tests/robots.test.ts)
     tech:
       - SvelteKit
       - Vite
@@ -507,3 +508,5 @@ change_log:
     change: Initial public-safe attack-surface inventory and machine-maintained state created.
   - date: 2026-07-07
     change: Added agent-discovery surface to AS-002 (RFC 8288 Link header, /.well-known/api-catalog linkset, /docs/api docs page, /docs/api/openapi.json); recorded pending zone-level decisions (Markdown for Agents, DNSSEC, DNS-AID) under AS-004. Owning document is docs/AGENT-DISCOVERY.md.
+  - date: 2026-07-07
+    change: robots.txt policy updated to allow user-triggered agent fetchers and AI search indexers from OpenAI and Anthropic (ChatGPT-User, OAI-SearchBot, Claude-User, Claude-Web, Claude-SearchBot) while keeping training/scraping crawlers disallowed. Advisory-only change; no exposure or auth change. Policy owned by docs/AGENT-DISCOVERY.md, pinned by tests/robots.test.ts.
