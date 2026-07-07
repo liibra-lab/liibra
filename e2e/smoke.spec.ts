@@ -58,3 +58,32 @@ test('proposicoes renders a list or an honest warning', async ({ page }) => {
 	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 	await expect(page.locator('main')).not.toHaveText('');
 });
+
+// Agent discovery (docs/AGENT-DISCOVERY.md): the Link header, the RFC 9727
+// catalog, and everything the catalog points at must all resolve on the
+// built Worker — these are offline, seeded surfaces, so 200s are guaranteed.
+test('agent discovery: Link header points at a resolvable api-catalog', async ({ request }) => {
+	const home = await request.get('/');
+	expect(home.headers()['link']).toContain('rel="api-catalog"');
+
+	const catalog = await request.get('/.well-known/api-catalog');
+	expect(catalog.status()).toBe(200);
+	expect(catalog.headers()['content-type']).toContain('application/linkset+json');
+
+	const body = await catalog.json();
+	for (const entry of body.linkset) {
+		for (const rel of ['service-desc', 'service-doc'] as const) {
+			for (const target of entry[rel]) {
+				const linked = await request.get(target.href);
+				expect(linked.status(), `${rel} → ${target.href}`).toBe(200);
+			}
+		}
+	}
+});
+
+test('docs/api page renders the machine-access documentation', async ({ page }) => {
+	const response = await page.goto('/docs/api');
+	expect(response?.status()).toBe(200);
+	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+	await expect(page.locator('main a[href="/.well-known/api-catalog"]')).toBeVisible();
+});

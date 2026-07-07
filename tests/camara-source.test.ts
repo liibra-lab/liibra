@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { CamaraPropositionSource, PAGE_SIZE } from '$lib/server/camara/camara-source';
+import { CamaraPropositionSource, EXCLUDED_TYPES, PAGE_SIZE } from '$lib/server/camara/camara-source';
 import type { FetchLike } from '$lib/server/camara/client';
 
 const source = new CamaraPropositionSource();
@@ -56,6 +56,36 @@ test('list tolerates a missing or malformed links array', async () => {
 		fetchReturning({ dados: [], links: [{ rel: 'last', href: 'not a url' }] })
 	);
 	assert.equal(badHref.totalPages, undefined);
+});
+
+test('list drops excluded proposition types from the results', async () => {
+	const dados = [
+		RAW_ITEM,
+		{ id: 2, siglaTipo: 'REQ', numero: 9, ano: 2026, ementa: 'Requer…' },
+		{ id: 3, siglaTipo: 'ESB', numero: 10, ano: 2026, ementa: 'Emenda…' },
+		{ id: 4, siglaTipo: 'SBT', numero: 11, ano: 2026, ementa: 'Substitutivo…' },
+		{ id: 5, siglaTipo: 'PEC', numero: 12, ano: 2026, ementa: 'Altera…' }
+	];
+
+	const page = await source.list({}, fetchReturning({ dados, links: [] }));
+	assert.deepEqual(
+		page.items.map((item) => item.siglaTipo),
+		['PL', 'PEC']
+	);
+});
+
+test('list answers an explicit excluded-type filter without calling the API', async () => {
+	for (const siglaTipo of EXCLUDED_TYPES) {
+		let called = false;
+		const fetchImpl: FetchLike = async () => {
+			called = true;
+			return new Response(JSON.stringify({ dados: [], links: [] }), { status: 200 });
+		};
+
+		const page = await source.list({ siglaTipo }, fetchImpl);
+		assert.equal(called, false);
+		assert.deepEqual(page, { items: [], hasNext: false });
+	}
 });
 
 test('list requests the expected page size', async () => {
