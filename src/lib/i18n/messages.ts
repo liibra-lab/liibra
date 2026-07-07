@@ -99,6 +99,18 @@ export interface Messages {
 	warning_sort_page_only: string;
 	warning_invalid_date: string;
 	warning_sru_diagnostic: string;
+	// /docs/api machine-access page
+	docs_api_title: string;
+	docs_api_intro: string;
+	docs_api_urn_title: string;
+	docs_api_urn_body: string;
+	docs_api_urn_example: string;
+	docs_api_discovery_title: string;
+	docs_api_discovery_body: string;
+	docs_api_link_catalog: string;
+	docs_api_link_openapi: string;
+	docs_api_link_sitemap: string;
+	docs_api_attribution: string;
 }
 
 const pt: Messages = {
@@ -198,7 +210,22 @@ const pt: Messages = {
 	warning_malformed: 'A resposta do LexML não pôde ser interpretada.',
 	warning_sort_page_only: 'Ordenação aplicada apenas a esta página de resultados.',
 	warning_invalid_date: 'Filtro de data ignorado: use um ano com quatro dígitos (AAAA).',
-	warning_sru_diagnostic: 'O LexML retornou um aviso para esta consulta.'
+	warning_sru_diagnostic: 'O LexML retornou um aviso para esta consulta.',
+	docs_api_title: 'API e acesso programático',
+	docs_api_intro:
+		'A Liibra é pública e somente leitura: nenhum endpoint exige autenticação, chave de API ou token. Esta página documenta a superfície legível por máquina.',
+	docs_api_urn_title: 'Resolvedor de URN',
+	docs_api_urn_body:
+		'Todo documento é identificado pela URN canônica do LexML (urn:lex:br:…). Uma requisição GET para /urn/{urn} responde com redirecionamento permanente (308) para a página do documento em /doc/{urn}.',
+	docs_api_urn_example: 'Exemplo',
+	docs_api_discovery_title: 'Descoberta',
+	docs_api_discovery_body:
+		'Agentes e clientes automatizados podem descobrir esta superfície pelos recursos abaixo, também anunciados via cabeçalho Link (RFC 8288) em todas as respostas.',
+	docs_api_link_catalog: 'Catálogo de APIs (RFC 9727)',
+	docs_api_link_openapi: 'Descrição OpenAPI',
+	docs_api_link_sitemap: 'Sitemap',
+	docs_api_attribution:
+		'O texto legal vem de fontes oficiais (LexML Brasil e Dados Abertos da Câmara dos Deputados). Preserve a atribuição e o link de verificação ao reutilizar o conteúdo; a Liibra republica fontes primárias e não é fonte autoritativa.'
 };
 
 const en: Messages = {
@@ -298,7 +325,22 @@ const en: Messages = {
 	warning_malformed: 'The LexML response could not be read.',
 	warning_sort_page_only: 'Ordering applied to this page of results only.',
 	warning_invalid_date: 'Date filter ignored: use a four-digit year (YYYY).',
-	warning_sru_diagnostic: 'LexML returned a notice for this query.'
+	warning_sru_diagnostic: 'LexML returned a notice for this query.',
+	docs_api_title: 'API & machine access',
+	docs_api_intro:
+		'Liibra is public and read-only: no endpoint requires authentication, API keys, or tokens. This page documents the machine-readable surface.',
+	docs_api_urn_title: 'URN resolver',
+	docs_api_urn_body:
+		'Every document is identified by its canonical LexML URN (urn:lex:br:…). A GET request to /urn/{urn} answers with a permanent redirect (308) to the document page at /doc/{urn}.',
+	docs_api_urn_example: 'Example',
+	docs_api_discovery_title: 'Discovery',
+	docs_api_discovery_body:
+		'Agents and automated clients can discover this surface through the resources below, also advertised via the Link header (RFC 8288) on every response.',
+	docs_api_link_catalog: 'API catalog (RFC 9727)',
+	docs_api_link_openapi: 'OpenAPI description',
+	docs_api_link_sitemap: 'Sitemap',
+	docs_api_attribution:
+		'Legal text comes from official sources (LexML Brasil and the Chamber of Deputies Open Data API). Preserve the attribution and verification link when reusing content; Liibra republishes primary sources and is not itself an authoritative source.'
 };
 
 export const messages: Record<Locale, Messages> = { pt, en };

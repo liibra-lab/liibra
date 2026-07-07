@@ -1,6 +1,6 @@
 # Attack Surface Inventory
 
-Last reviewed: 2026-07-03
+Last reviewed: 2026-07-07
 
 This file is the running human-readable inventory of Liibra-related attack surface. It is intentionally public-safe because this repository is public. Do not record secrets, private IP addresses, recovery codes, exact home-network topology, personal forwarding targets, or unpublished vendor account details here.
 
@@ -55,7 +55,7 @@ Use the status terms exactly:
 | ID | Surface | Things deployed / in scope | Type | Hosting model | Auth into platform | Audience / exposure | Status | Criticality | Test frequency |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AS-001 | GitHub organization and repositories | `liibra-lab/liibra`, `liibra-lab/dark-liibra`, GitHub Actions, Dependabot, CODEOWNERS, PR review process | Source control, CI, supply chain | Third-party SaaS | GitHub account/OAuth; admin/write permissions; repository tokens for Actions | Public repositories; maintainer-only write/admin | Partially verified | Critical | Monthly + every workflow/permission change |
-| AS-002 | Liibra public website | `liibra.com.br` Worker-backed SvelteKit app, static assets, server-rendered routes | Web property | Third-party edge compute | Cloudflare account and Wrangler API token/account binding | Public, no write path | Partially verified | High | Quarterly + every deploy/routing change |
+| AS-002 | Liibra public website | `liibra.com.br` Worker-backed SvelteKit app, static assets, server-rendered routes, agent-discovery endpoints (`/.well-known/api-catalog`, `/docs/api`, `/docs/api/openapi.json`) | Web property | Third-party edge compute | Cloudflare account and Wrangler API token/account binding | Public, no write path | Partially verified | High | Quarterly + every deploy/routing change |
 | AS-003 | Liibra server-side API integrations | LexML SRU client, Câmara Dados Abertos client, server-only external fetch boundary | API dependency / ingestion | Third-party public APIs consumed by Cloudflare Worker | No app auth to upstream APIs; deploy/auth via Cloudflare only | Public website triggers server-side egress; upstream APIs public | Verified from repo, runtime still needs verification | High | Quarterly + every data-source change |
 | AS-004 | Cloudflare zone and edge controls | DNS for `liibra.com.br`, Worker route bindings, HTTPS redirects, Email Routing, Web Analytics/RUM, future WAF/rate limits | DNS, CDN, edge security, mail routing | Third-party SaaS | Cloudflare account; API tokens for deploy | Public DNS/web; maintainer-only admin | Needs verification | Critical | Monthly + every DNS/mail/route change |
 | AS-005 | `dark-liibra` browser game | Browser RPG prototype using Next.js, React, Phaser, Vercel Analytics/Speed Insights dependency, intended `/dark` or `dark.liibra.com.br` surface | Web property / game client | Third-party or static host; current host not verified | Hosting vendor account; GitHub repo write access | Unknown until deployment is verified | Partially verified from repo only | Medium until public, High once public | Every 6 months; quarterly once public |
@@ -130,6 +130,15 @@ Use the status terms exactly:
 - Search and proposition-browsing pages.
 - SvelteKit routes and server-side load functions.
 - Static brand assets and self-hosted font assets.
+- Agent-discovery surface (see `docs/AGENT-DISCOVERY.md`): RFC 8288 `Link`
+  response header, `/.well-known/api-catalog` (RFC 9727 linkset),
+  `/docs/api` documentation page, and `/docs/api/openapi.json`. All public,
+  read-only, and served from pure/static code with no upstream egress and
+  no authentication metadata.
+- `robots.txt` policy (advisory, not an access control): AI
+  training/scraping crawlers disallowed; user-triggered agent fetchers and
+  AI search indexers from OpenAI/Anthropic allowed. Owned by
+  `docs/AGENT-DISCOVERY.md`, pinned by `tests/robots.test.ts`.
 
 **Authentication and authorization**
 
@@ -250,6 +259,9 @@ Use the status terms exactly:
 - Confirm SSL/TLS mode, Always Use HTTPS, HSTS, minimum TLS, and redirect rules.
 - Confirm no stale Vercel/Page routes remain active.
 - Create narrow deploy token scoped only to the needed Worker/account resources.
+- Decide the pending agent-discovery zone work in `docs/AGENT-DISCOVERY.md`:
+  the "Markdown for Agents" toggle, DNSSEC signing, and (only once an agent
+  endpoint exists) DNS-AID `_agents` SVCB/HTTPS records.
 
 ### AS-005 — `dark-liibra` browser game
 
