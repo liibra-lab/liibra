@@ -11,6 +11,8 @@ summary:
   language rule, and non-goals. They bind code review; read them before
   substantive work.
 - **`ROADMAP.md`** — the plan of record: current state and phased goals.
+- **`Principles.md`** — legal data tool layer: standing rules and key design
+  for the LexML-based URN/metadata/resolver layer.
 - **`docs/BRAND.md`** — visual identity: logo, typography, and color rules.
 - **`attacksurface.md`** and **`attacksurface.ai`** — public-safe security
   inventory. When deployment, hosting, DNS, mail, CI/CD, external APIs,
