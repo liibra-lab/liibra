@@ -18,6 +18,13 @@ const MAX_PAGE_SIZE = 50;
 /** LexML index/search results are near-static; 1 hour in the edge cache. */
 export const SEARCH_TTL_SECONDS = 3600;
 
+/**
+ * Milliseconds before an SRU request is aborted. An upstream that hangs (accepts
+ * the connection but never responds) must degrade into the same
+ * `source_unavailable` warning as one that errors — never a stalled render.
+ */
+export const UPSTREAM_TIMEOUT_MS = 8000;
+
 export type FetchLike = typeof fetch;
 
 function clampPage(page: number | undefined): number {
@@ -99,6 +106,7 @@ export class LexmlSruSource {
 				url.toString(),
 				{
 					headers: { Accept: 'application/xml' },
+					signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
 					cf: { cacheTtl: SEARCH_TTL_SECONDS, cacheEverything: true }
 				} as RequestInit,
 				fetchImpl,

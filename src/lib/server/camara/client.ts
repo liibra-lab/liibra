@@ -15,6 +15,12 @@ export const LIST_TTL_SECONDS = 1800;
 /** A single proposition's detail/authors move slower than the list; 1 hour. */
 export const DETAIL_TTL_SECONDS = 3600;
 
+/**
+ * Milliseconds before a Câmara request is aborted. The API is slow but a hang
+ * must become a `CamaraApiError` the routes can render, not a stalled render.
+ */
+export const UPSTREAM_TIMEOUT_MS = 8000;
+
 /** Fetch implementation injected by the caller (use the load event's `fetch`). */
 export type FetchLike = typeof fetch;
 
@@ -83,6 +89,7 @@ export async function camaraFetchEnvelope<T>(
 			url,
 			{
 				headers: { Accept: 'application/json' },
+				signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
 				// `cf` is a Cloudflare Workers extension to RequestInit; ignored elsewhere.
 				cf: { cacheTtl: ttlSeconds, cacheEverything: true }
 			} as RequestInit,
@@ -100,7 +107,13 @@ export async function camaraFetchEnvelope<T>(
 		throw new CamaraApiError(`Câmara API returned ${response.status}`, response.status);
 	}
 
-	const body = (await response.json()) as RawEnvelope<T>;
+	let body: RawEnvelope<T>;
+	try {
+		body = (await response.json()) as RawEnvelope<T>;
+	} catch (cause) {
+		// Covers both malformed JSON and the timeout signal firing mid-body-read.
+		throw new CamaraApiError(`Error reading Câmara API response: ${String(cause)}`);
+	}
 	return { dados: body.dados, links: body.links ?? [] };
 }
 
