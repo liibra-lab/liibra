@@ -24,6 +24,15 @@ import type {
 
 export const PAGE_SIZE = 20;
 
+/**
+ * Proposition types removed from listings: REQ (requerimento) plus the
+ * accessory ESB and SBT documents. They are procedural records attached to a
+ * primary proposition, and they flood the id-ordered browse. The API only
+ * supports *include* filters on `siglaTipo`, so exclusion happens here after
+ * the fetch — a page may therefore carry fewer than PAGE_SIZE items.
+ */
+export const EXCLUDED_TYPES: ReadonlySet<string> = new Set(['REQ', 'ESB', 'SBT']);
+
 /** Canonical public page for a proposition on camara.leg.br. */
 export function officialUrl(id: number): string {
 	return `https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=${id}`;
@@ -110,6 +119,11 @@ function mapStatus(raw: RawStatus): PropositionStatus {
 
 export class CamaraPropositionSource implements PropositionSource {
 	async list(filters: PropositionFilters, fetchImpl: FetchLike): Promise<PropositionPage> {
+		// An explicit request for an excluded type can only ever produce pages
+		// that filter down to nothing, so answer it without touching the API.
+		if (filters.siglaTipo && EXCLUDED_TYPES.has(filters.siglaTipo.toUpperCase())) {
+			return { items: [], hasNext: false };
+		}
 		const { dados, links } = await camaraFetchEnvelope<RawSummary[]>(
 			'/proposicoes',
 			{
@@ -125,7 +139,7 @@ export class CamaraPropositionSource implements PropositionSource {
 			LIST_TTL_SECONDS
 		);
 		return {
-			items: dados.map(mapSummary),
+			items: dados.map(mapSummary).filter((item) => !EXCLUDED_TYPES.has(item.siglaTipo)),
 			hasNext: links.some((link) => link.rel === 'next'),
 			totalPages: lastPageFrom(links)
 		};
