@@ -1,5 +1,6 @@
 import type { Handle } from '@sveltejs/kit';
 import { resolveLocale } from '$lib/i18n/locales';
+import { AGENT_DISCOVERY_LINK } from '$lib/discovery/api-catalog';
 
 // Resolve the UI locale once per request (cookie → Accept-Language → default)
 // and keep it request-scoped on `event.locals` — never in module-global state,
@@ -26,6 +27,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()'
 	);
 	response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+
+	// RFC 8288 agent-discovery relations (docs/AGENT-DISCOVERY.md). Appended,
+	// not set, so any Link header SvelteKit emits (e.g. preload) survives.
+	response.headers.append('Link', AGENT_DISCOVERY_LINK);
 
 	return response;
 };

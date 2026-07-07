@@ -1,0 +1,64 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+		"title": "Liibra",
+		"summary": "Open, primary-source access to Brazilian legal information, addressed by LexML URN.",
+		"description": "Public, read-only HTTP surface for liibra.com.br. No authentication, API keys, or tokens: every endpoint is open. Documents are addressed by their canonical LexML URN (urn:lex:br:...). Legal text originates from official sources (LexML Brasil, Câmara dos Deputados Dados Abertos); every document page keeps attribution and a verification link — preserve them when reusing content. Liibra republishes primary sources and is not itself an authoritative source.",
+		"version": "0.1.0",
+		"contact": {
+			"name": "Liibra",
+			"url": "https://github.com/liibra-lab/liibra"
+		}
+	},
+	"servers": [{ "url": "https://liibra.com.br" }],
+	"paths": {
+		"/urn/{urn}": {
+			"get": {
+				"operationId": "resolveUrn",
+				"summary": "Resolve a LexML URN to its Liibra document page",
+				"description": "LexML-style compatibility entry point. Issues a permanent redirect to the URN-addressed document page at /doc/{urn}.",
+				"parameters": [{ "$ref": "#/components/parameters/urn" }],
+				"responses": {
+					"308": {
+						"description": "Permanent redirect to the URN-addressed document page.",
+						"headers": {
+							"Location": {
+								"description": "The document page, /doc/{urn}.",
+								"schema": { "type": "string" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/doc/{urn}": {
+			"get": {
+				"operationId": "getDocument",
+				"summary": "URN-addressed document page",
+				"description": "Server-rendered HTML for the document identified by the LexML URN, with source attribution and a verification link to the official source.",
+				"parameters": [{ "$ref": "#/components/parameters/urn" }],
+				"responses": {
+					"200": {
+						"description": "The document page. Legal text is always in Portuguese; interface chrome follows the locale cookie or Accept-Language.",
+						"content": { "text/html": {} }
+					},
+					"404": {
+						"description": "No document is known for this URN.",
+						"content": { "text/html": {} }
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"parameters": {
+			"urn": {
+				"name": "urn",
+				"in": "path",
+				"required": true,
+				"description": "Canonical LexML URN, e.g. urn:lex:br:federal:constituicao:1988-10-05;1988",
+				"schema": { "type": "string", "pattern": "^urn:lex:br:" }
+			}
+		}
+	}
+}

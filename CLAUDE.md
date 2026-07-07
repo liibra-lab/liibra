@@ -14,6 +14,8 @@ summary:
 - **`Principles.md`** — legal data tool layer: standing rules and key design
   for the LexML-based URN/metadata/resolver layer.
 - **`docs/BRAND.md`** — visual identity: logo, typography, and color rules.
+- **`docs/AGENT-DISCOVERY.md`** — machine/agent discovery surface: what is
+  published, what is dashboard/DNS work, and what is deliberately absent.
 - **`attacksurface.md`** and **`attacksurface.ai`** — public-safe security
   inventory. When deployment, hosting, DNS, mail, CI/CD, external APIs,
   databases, storage, self-hosted services, local AI tooling, or exposure
