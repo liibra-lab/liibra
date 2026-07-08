@@ -16,6 +16,9 @@ summary:
 - **`docs/BRAND.md`** — visual identity: logo, typography, and color rules.
 - **`docs/AGENT-DISCOVERY.md`** — machine/agent discovery surface: what is
   published, what is dashboard/DNS work, and what is deliberately absent.
+- **`docs/AGENT-TRUST.md`** — coding-agent trust boundary: what agents do
+  autonomously, ask for, or never do; owns the `permissions` block in
+  `.claude/settings.json`.
 - **`attacksurface.md`** and **`attacksurface.ai`** — public-safe security
   inventory. When deployment, hosting, DNS, mail, CI/CD, external APIs,
   databases, storage, self-hosted services, local AI tooling, or exposure

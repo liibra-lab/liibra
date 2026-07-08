@@ -3,7 +3,7 @@
 # Do not store secrets, private IPs, account recovery data, personal mailbox targets, or physical-location details.
 
 schema_version: 1
-last_reviewed: 2026-07-07
+last_reviewed: 2026-07-08
 source_of_truth:
   human_inventory: attacksurface.md
   skill: .claude/skills/AttackSurface/SKILL.md
@@ -503,6 +503,45 @@ surfaces:
       - Migration and validation process
     testing_frequency: Monthly once production data exists
 
+  - id: AS-014
+    name: Coding-agent harness (Claude Code)
+    status: Partially verified
+    criticality: Critical
+    type:
+      - Endpoint
+      - CI/CD
+    hosting_model: Local-only plus third-party SaaS (vendor-hosted remote sessions)
+    deployed:
+      - Claude Code sessions on liibra-lab/liibra (local workstation and remote containers)
+      - .claude/settings.json permission tiers
+      - .claude/hooks/session-start.sh (npm ci from committed lockfile)
+      - .claude/skills and .claude/workflows
+      - docs/AGENT-TRUST.md owning document
+    auth_into_platform:
+      - Anthropic account/OAuth
+      - GitHub App token scoped to repository (remote sessions)
+      - Developer local credentials (local sessions; see AS-011)
+    runtime_access:
+      - Maintainer-only
+    controls_verified:
+      - Tiered permissions in .claude/settings.json (allow gate/local-git/edits/claude-branch pushes; ask lockfile/seed-refresh/main; deny deploy/secrets/publish/gate-bypassing GitHub writes)
+      - Read denies on .env and .dev.vars files
+      - SessionStart hook installs via npm ci only, never mutates lockfile
+      - Deploy credentials absent from repo; deploy impossible without environment token
+    common_issues:
+      - Deny rules mistaken for a sandbox (string-matched rails, not execution isolation)
+      - Prompt injection via fetched upstream content
+      - Permissive local modes bypassing the ask tier
+      - Secrets leaking from agent context into public artifacts
+      - Missing main branch ruleset weakening the autonomous push lane
+      - npm ci lifecycle scripts at session start
+    verify_next:
+      - main branch ruleset (load-bearing for claude/* autonomous push lane; AS-001 P0)
+      - Local sessions not run with permission-bypass flags
+      - Remote-session GitHub App scope limited to this repository
+      - WebFetch domain whitelist review when upstream sources change
+    testing_frequency: Monthly + every permission/tooling change
+
 change_log:
   - date: 2026-07-03
     change: Initial public-safe attack-surface inventory and machine-maintained state created.
@@ -510,3 +549,7 @@ change_log:
     change: Added agent-discovery surface to AS-002 (RFC 8288 Link header, /.well-known/api-catalog linkset, /docs/api docs page, /docs/api/openapi.json); recorded pending zone-level decisions (Markdown for Agents, DNSSEC, DNS-AID) under AS-004. Owning document is docs/AGENT-DISCOVERY.md.
   - date: 2026-07-07
     change: robots.txt policy updated to allow user-triggered agent fetchers and AI search indexers from OpenAI and Anthropic (ChatGPT-User, OAI-SearchBot, Claude-User, Claude-Web, Claude-SearchBot) while keeping training/scraping crawlers disallowed. Advisory-only change; no exposure or auth change. Policy owned by docs/AGENT-DISCOVERY.md, pinned by tests/robots.test.ts.
+  - date: 2026-07-08
+    change: Added AS-014 coding-agent harness (Claude Code). Defined tiered agent permission boundary in .claude/settings.json (allow quality gate/local git/edits/claude-branch pushes and whitelisted upstream doc fetches; ask lockfile mutation, primary-source seed refresh, and main-branch writes; deny wrangler deploy/secret/login/delete, npm publish, .env/.dev.vars reads, and server-side GitHub writes that bypass the local gate). Owning document is docs/AGENT-TRUST.md. Control added: agent deny rails on deploy/secrets/publish. No public exposure change.
+  - date: 2026-07-08
+    change: AS-014 hardening — widened agent Read deny from .env to .env.* in .claude/settings.json (covers .env.local/.env.production variants; also blocks the secret-free .env.example/.env.test templates as accepted cost). Rationale updated in docs/AGENT-TRUST.md.
