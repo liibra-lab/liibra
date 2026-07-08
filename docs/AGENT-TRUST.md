@@ -57,7 +57,7 @@ Everything unlisted falls through to the harness default, which prompts.
 | `wrangler deploy` / `npm run deploy`, `wrangler delete` | Production deploy control over liibra.com.br is Critical. Zero agent leverage: deploying is a deliberate maintainer act. |
 | `wrangler secret`, `wrangler login` | Production credential mutation and credential minting. |
 | `npm publish` | The package is `private: true`; publishing has no legitimate path at all. |
-| `Read(.env)`, `Read(.dev.vars*)` | Secret-bearing files. `.gitignore` keeps them out of commits but not out of an agent's context window — and from there potentially into a public PR body or log. `.env.example` and `.env.test` are un-ignored and secret-free by convention, and stay readable. |
+| `Read(.env)`, `Read(.env.*)`, `Read(.dev.vars*)` | Secret-bearing files. `.gitignore` keeps them out of commits but not out of an agent's context window — and from there potentially into a public PR body or log. The wildcard also blocks `.env.example` and `.env.test` (secret-free by convention): an over-inclusive deny is cheaper than a missed variant like `.env.local` or `.env.production`, so anything an agent needs from a template belongs in docs instead. |
 | `mcp__github__push_files`, `create_or_update_file`, `delete_file` | Server-side GitHub writes bypass the local clone entirely — no `npm run gate`, no local diff. All repository writes go through the local gate path; that rule has no exceptions. |
 
 ## What this boundary is — and is not

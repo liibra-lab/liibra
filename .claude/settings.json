@@ -74,6 +74,7 @@
 			"Bash(npm publish)",
 			"Bash(npm publish:*)",
 			"Read(.env)",
+			"Read(.env.*)",
 			"Read(.dev.vars)",
 			"Read(.dev.vars.*)",
 			"mcp__github__push_files",
