@@ -1,6 +1,6 @@
 # Attack Surface Inventory
 
-Last reviewed: 2026-07-07
+Last reviewed: 2026-07-08
 
 This file is the running human-readable inventory of Liibra-related attack surface. It is intentionally public-safe because this repository is public. Do not record secrets, private IP addresses, recovery codes, exact home-network topology, personal forwarding targets, or unpublished vendor account details here.
 
@@ -67,6 +67,7 @@ Use the status terms exactly:
 | AS-011 | Developer workstation | Fedora workstation, SSH keys, Git credentials, Cloudflare/GitHub/Vercel CLIs, local env files | Endpoint / secret storage | Self-managed endpoint | OS login, SSH agent, browser sessions, CLI tokens | Local physical/user boundary | Needs verification | Critical because it holds deploy credentials | Monthly checklist; after compromise suspicion |
 | AS-012 | External data/storage sources | Kaggle LexML dataset, future dados.gov.br/Senado ingestion, downloaded legal corpora | Data ingestion / offline dataset | Third-party source + local/cloud storage | Vendor account for downloads; none for public APIs unless introduced | Offline/internal until published | Planned/needs verification | Medium | Every 6 months + before publication/ingestion automation |
 | AS-013 | Future Cloudflare data plane | Planned D1/KV/R2/Cron/Queues for cached legal text and refresh jobs | Database/object storage/API jobs | Third-party edge data services | Cloudflare account/API token; Worker bindings | Public reads through Worker; maintainer-only writes/jobs | Planned | Critical once deployed | Monthly once production data exists |
+| AS-014 | Coding-agent harness (Claude Code) | Agent sessions (local workstation and vendor-hosted remote) with shell, file, git, and GitHub tools on `liibra-lab/liibra`; tiered permission boundary in `.claude/settings.json`; SessionStart `npm ci` hook | Endpoint / CI-CD-adjacent automation | Local-only plus third-party SaaS (remote sessions) | Anthropic account; GitHub App token in remote sessions; developer's local credentials in local sessions | Maintainer-only | Partially verified | Critical | Monthly + every permission/tooling change |
 
 ## Detailed records
 
@@ -592,6 +593,48 @@ Use the status terms exactly:
 - Add data classification before first production store.
 - Define backup/export/restore procedure.
 - Define read/write bindings and least-privilege deployment roles.
+
+### AS-014 — Coding-agent harness (Claude Code)
+
+**What it uses**
+
+- Claude Code sessions operating on `liibra-lab/liibra`: local sessions on the developer workstation (AS-011) and vendor-hosted remote sessions (web/mobile) in ephemeral containers.
+- Tools available to sessions: shell, file read/write, git, web fetch, and GitHub API access scoped to the repository.
+- Checked-in configuration: `.claude/settings.json` (permission tiers, SessionStart hook), `.claude/hooks/session-start.sh` (`npm ci` on remote session start), `.claude/skills/`, `.claude/workflows/`.
+- Owning document for the trust boundary: `docs/AGENT-TRUST.md`.
+
+**Everything deployed or represented here**
+
+- Not a network service; a control point for repository writes, comparable to AS-011 in kind. An agent session can read the working tree, edit files, run commands, and push branches.
+
+**Authentication and authorization**
+
+- Maintainer authenticates to the agent vendor (Anthropic account/OAuth).
+- Remote sessions act on GitHub through a GitHub App token scoped to the repository; local sessions use whatever developer credentials exist on the workstation (AS-011).
+- Authorization inside a session is the tiered permission boundary in `.claude/settings.json`: autonomous (quality gate, local git, edits, `claude/*` branch pushes, whitelisted upstream doc fetches), ask (lockfile mutation, primary-source seed refresh, anything touching `main`), deny (`wrangler deploy`/`secret`/`login`/`delete`, `npm publish`, secret-file reads, server-side GitHub writes that bypass the local quality gate).
+
+**Current defenses**
+
+- Tiered permission boundary in `.claude/settings.json` with deny rails on deploy, secrets, publish, and gate-bypassing GitHub writes (this task).
+- Deploy credentials are never in the repo or the container by default; without `CLOUDFLARE_API_TOKEN` a session cannot deploy regardless of permissions.
+- CODEOWNERS review on governance/deployment/server paths; CI re-runs the full gate on every PR.
+- SessionStart hook installs only from the committed lockfile (`npm ci`, never mutates it).
+
+**Common issues / misconfigurations**
+
+- Permission deny rules treated as a sandbox: they are string-matched rails against accident and prompt injection, not an execution boundary.
+- Prompt injection through fetched upstream content (LexML/Câmara XML, web pages) steering an agent toward exfiltration or unwanted writes.
+- Permissive local session modes (skip-permissions flags) bypassing the ask tier entirely.
+- Agent-readable secrets leaking into public artifacts (PR bodies, logs) — mitigated by `Read` denies on `.env`/`.dev.vars`.
+- Missing branch protection on `main` making the autonomous `claude/*` push lane riskier than designed.
+- Supply-chain execution at session start: `npm ci` runs lifecycle scripts of locked dependencies.
+
+**Open verification tasks**
+
+- Confirm `main` branch ruleset (AS-001 P0) — load-bearing for this boundary's autonomous push lane.
+- Confirm local sessions run in default or plan mode, not with permission bypass flags.
+- Confirm remote-session GitHub App scope stays limited to this repository.
+- Revisit the WebFetch domain whitelist when new upstream sources are added.
 
 ## Immediate prioritized gaps
 
