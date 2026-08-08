@@ -59,6 +59,11 @@ Run the full local gate before opening a pull request or deploying:
 npm run gate
 ```
 
+The gate is the mechanical half of finishing a change. The review workflow
+around it — how a change is framed, checked against the project's invariants,
+and shown to be done — lives in [`docs/REVIEW.md`](docs/REVIEW.md), and the
+pull request template records the evidence.
+
 Script summary:
 
 | Script | Purpose |

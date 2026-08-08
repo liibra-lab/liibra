@@ -78,7 +78,8 @@ Use the status terms exactly:
 - GitHub public repositories: `liibra-lab/liibra` and `liibra-lab/dark-liibra`.
 - GitHub Actions CI for `liibra`.
 - Dependabot for npm and GitHub Actions in `liibra`.
-- CODEOWNERS for governance, deployment, package, workflow, and server-side paths.
+- CODEOWNERS for governance, deployment, package, workflow, review-workflow, and server-side paths.
+- `.github/pull_request_template.md` for change evidence (checks run, manual verification, owner documents updated, residual risk).
 - `SECURITY.md` for private vulnerability reports.
 
 **Everything deployed or represented here**
@@ -97,7 +98,8 @@ Use the status terms exactly:
 
 - `liibra` CI sets `permissions: contents: read`.
 - Dependabot is configured weekly for npm and GitHub Actions.
-- CODEOWNERS protects `.github/`, workflows, `wrangler.jsonc`, package files, `src/hooks.server.ts`, and `src/lib/server/`.
+- CODEOWNERS protects `.github/`, workflows, `wrangler.jsonc`, package files, `src/hooks.server.ts`, `src/lib/server/`, `docs/REVIEW.md`, `.claude/skills/`, and the pull request template.
+- Pull request template requires stated evidence per change: exact checks run, checks skipped and why, manual verification and its environment, owner documents updated, and residual risk (`docs/REVIEW.md`).
 - `SECURITY.md` requests private reporting.
 
 **Common issues / misconfigurations**
@@ -600,8 +602,8 @@ Use the status terms exactly:
 
 - Claude Code sessions operating on `liibra-lab/liibra`: local sessions on the developer workstation (AS-011) and vendor-hosted remote sessions (web/mobile) in ephemeral containers.
 - Tools available to sessions: shell, file read/write, git, web fetch, and GitHub API access scoped to the repository.
-- Checked-in configuration: `.claude/settings.json` (permission tiers, SessionStart hook), `.claude/hooks/session-start.sh` (`npm ci` on remote session start), `.claude/skills/`, `.claude/workflows/`.
-- Owning document for the trust boundary: `docs/AGENT-TRUST.md`.
+- Checked-in configuration: `.claude/settings.json` (permission tiers, SessionStart hook), `.claude/hooks/session-start.sh` (`npm ci` on remote session start), `.claude/skills/` (AttackSurface, Review), `.claude/workflows/`.
+- Owning document for the trust boundary: `docs/AGENT-TRUST.md`. Owning document for the review and delivery workflow an agent must follow before calling work done: `docs/REVIEW.md`, whose executable form is `.claude/skills/Review/SKILL.md`.
 
 **Everything deployed or represented here**
 
@@ -619,6 +621,7 @@ Use the status terms exactly:
 - Deploy credentials are never in the repo or the container by default; without `CLOUDFLARE_API_TOKEN` a session cannot deploy regardless of permissions.
 - CODEOWNERS review on governance/deployment/server paths; CI re-runs the full gate on every PR.
 - SessionStart hook installs only from the committed lockfile (`npm ci`, never mutates it).
+- Review workflow (`docs/REVIEW.md`, this task): hard gates that forbid calling a change done on an unrun gate, a bundled diff, secrets or debug code in the diff, or an unfired surface trigger; an explicit rule that an agent's own implementation report is not validation evidence and that command output, review state, and test results are never fabricated. Advisory rails on agent self-reporting, not an execution control.
 
 **Common issues / misconfigurations**
 

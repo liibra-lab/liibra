@@ -19,6 +19,9 @@ summary:
 - **`docs/AGENT-TRUST.md`** — coding-agent trust boundary: what agents do
   autonomously, ask for, or never do; owns the `permissions` block in
   `.claude/settings.json`.
+- **`docs/REVIEW.md`** — the review and delivery workflow: how a change is
+  framed, reviewed against the invariants above, and shown to be done. Its
+  executable form is `.claude/skills/Review/SKILL.md`.
 - **`attacksurface.md`** and **`attacksurface.ai`** — public-safe security
   inventory. When deployment, hosting, DNS, mail, CI/CD, external APIs,
   databases, storage, self-hosted services, local AI tooling, or exposure
@@ -32,6 +35,10 @@ npm run gate
 
 CI enforces the same steps. Dependencies install from the committed
 `package-lock.json` (`npm ci`); never mutate the lockfile casually. Node 22.
+
+The gate is the mechanical half of finishing a change. The other half — the
+invariant checks, the surface triggers, and the hard gates that decide when a
+change may be called done — is `docs/REVIEW.md`.
 
 ## Repository notes
 

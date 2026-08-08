@@ -15,6 +15,14 @@ techniques, even the phase ordering — are the best guess at the time of
 writing; decide them at implementation time, preferring the simplest design
 that satisfies [`docs/PRINCIPLES.md`](docs/PRINCIPLES.md).
 
+The **current** phase carries explicit **exit criteria** (the observable result
+required to leave it) and **validation** (the automated checks and manual tests
+that prove it). Later phases get theirs when they become current — writing them
+early guesses at criteria that the preceding phase will change. Criteria are
+observable outcomes, never "it works": a phase is left when a stated condition
+is true, not when the work feels finished.
+[`docs/REVIEW.md`](docs/REVIEW.md) owns the procedure that applies them.
+
 ## Where the repository stands (review summary, 2026-07)
 
 ### What is working well
@@ -66,6 +74,9 @@ by them.
 
 ## Phase 0 — Foundation hygiene (short term)
 
+Goal: the repository is safe and legible for outside contributors, and the
+gaps that would embarrass an open legal-information project are closed.
+
 - [ ] Add a LICENSE (content and code may need distinct licensing; LII projects
       typically use permissive licenses for code, and Brazilian legal text is
       public domain under Lei 9.610/98 art. 8º, I).
@@ -75,6 +86,20 @@ by them.
 - [ ] Add CONTRIBUTING.md and issue templates.
 - [x] Add Playwright smoke tests (home, `/search`, `/doc`, `/proposicoes`)
       running against `wrangler dev` in CI (`e2e/smoke.spec.ts`).
+
+**Exit criteria.** A LICENSE file exists and README states which licence covers
+code and which covers content. An unknown route renders the branded error page
+in both locales rather than the framework default. Every response carries CSP
+and HSTS headers; every GitHub Actions step is pinned to a commit SHA; the
+`main` ruleset is enabled with PR required, status checks required, and
+force-push and deletion disabled, which clears the "Branch protection/ruleset
+for main" item from AS-001's `verify_next` in `attacksurface.md` and closes its
+P0. A first-time contributor can go from clone to passing gate using
+CONTRIBUTING.md alone.
+
+**Validation.** `npm run gate` and `npm run test:e2e`; a header assertion in
+`tests/` covering CSP and HSTS; a smoke test asserting the error page; manual
+check of the `main` ruleset in the GitHub UI, recorded in the PR.
 
 ## Phase 1 — Unify search and document resolution
 
@@ -95,6 +120,21 @@ Goal: any URN discoverable in `/search` renders inside Liibra.
       "featured documents" list for the home page and as offline test fixtures.
 - [ ] Surface SRU facets (category, locality, authority counts) in
       `SearchFilters` — the `LegalFacetGroup` types already exist.
+
+**Exit criteria.** A URN taken from any `/search` result page resolves at
+`/doc/<urn>` to a metadata header with attribution and official links, instead
+of 404ing — the gap named above as the single biggest functional one is closed.
+Resolution reports its match level explicitly (exact, parent, or fuzzy) and
+never falls back silently ([`Principles.md`](Principles.md) #5). The committed
+`explain` fixture confirms the CQL index names actually served by the endpoint,
+and sorting is either server-side or still honestly labelled `sort_page_only`.
+`legal/seed-data.ts` is no longer the `/doc` source of truth.
+
+**Validation.** `npm run gen:sru-fixtures` captured against a network that can
+reach lexml.gov.br, with the results committed under `tests/fixtures/sru/`;
+`tests/sru-fixtures.test.ts` and `tests/parse-contract.test.ts` green over
+them; a smoke test that resolves a non-seeded URN end to end; manual check of
+several URNs spanning document types, recorded in the PR.
 
 ## Phase 2 — Full text via LexML XML (the core deliverable)
 

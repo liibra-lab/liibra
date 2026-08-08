@@ -18,6 +18,11 @@ attacksurface.ai @liibra-lab
 .claude/skills/AttackSurface/ @liibra-lab
 .claude/workflows/AssessAttackSurface.md @liibra-lab
 
+# Review workflow and its executable form.
+docs/REVIEW.md @liibra-lab
+.claude/skills/ @liibra-lab
+.github/pull_request_template.md @liibra-lab
+
 # Server-side request handling and external data clients.
 src/hooks.server.ts @liibra-lab
 src/lib/server/ @liibra-lab

@@ -59,6 +59,7 @@ surfaces:
       - GitHub Actions for liibra
       - Dependabot for liibra
       - CODEOWNERS for liibra
+      - Pull request evidence template for liibra
       - SECURITY.md for liibra
     auth_into_platform:
       - GitHub account/OAuth
@@ -70,7 +71,8 @@ surfaces:
     controls_verified:
       - liibra CI permissions: contents: read
       - Dependabot weekly npm and GitHub Actions updates
-      - CODEOWNERS for governance/deployment/package/server paths
+      - CODEOWNERS for governance/deployment/package/server/review-workflow paths
+      - PR template requiring checks run, checks skipped, manual verification, owner-doc updates, and residual risk
       - Private vulnerability reporting policy
     common_issues:
       - Overprivileged Actions token
@@ -515,8 +517,9 @@ surfaces:
       - Claude Code sessions on liibra-lab/liibra (local workstation and remote containers)
       - .claude/settings.json permission tiers
       - .claude/hooks/session-start.sh (npm ci from committed lockfile)
-      - .claude/skills and .claude/workflows
+      - .claude/skills (AttackSurface, Review) and .claude/workflows
       - docs/AGENT-TRUST.md owning document
+      - docs/REVIEW.md review and delivery workflow, executable form .claude/skills/Review/SKILL.md
     auth_into_platform:
       - Anthropic account/OAuth
       - GitHub App token scoped to repository (remote sessions)
@@ -528,6 +531,7 @@ surfaces:
       - Read denies on .env and .dev.vars files
       - SessionStart hook installs via npm ci only, never mutates lockfile
       - Deploy credentials absent from repo; deploy impossible without environment token
+      - Review workflow hard gates (docs/REVIEW.md); agent self-report is not validation evidence; no fabricated command output, review state, or test results. Advisory rails on self-reporting, not execution isolation
     common_issues:
       - Deny rules mistaken for a sandbox (string-matched rails, not execution isolation)
       - Prompt injection via fetched upstream content
@@ -553,3 +557,5 @@ change_log:
     change: Added AS-014 coding-agent harness (Claude Code). Defined tiered agent permission boundary in .claude/settings.json (allow quality gate/local git/edits/claude-branch pushes and whitelisted upstream doc fetches; ask lockfile mutation, primary-source seed refresh, and main-branch writes; deny wrangler deploy/secret/login/delete, npm publish, .env/.dev.vars reads, and server-side GitHub writes that bypass the local gate). Owning document is docs/AGENT-TRUST.md. Control added: agent deny rails on deploy/secrets/publish. No public exposure change.
   - date: 2026-07-08
     change: AS-014 hardening — widened agent Read deny from .env to .env.* in .claude/settings.json (covers .env.local/.env.production variants; also blocks the secret-free .env.example/.env.test templates as accepted cost). Rationale updated in docs/AGENT-TRUST.md.
+  - date: 2026-08-08
+    change: Added the review and delivery workflow (docs/REVIEW.md) and its executable form (.claude/skills/Review/SKILL.md), plus .github/pull_request_template.md. AS-001 governance controls extended - CODEOWNERS now also covers docs/REVIEW.md, .claude/skills/, and the PR template, and the PR template requires per-change evidence (exact checks run, checks skipped and why, manual verification and environment, owner documents updated, residual risk). AS-014 gains the review workflow as an advisory control on agent self-reporting - hard gates forbidding "done" on an unrun gate, a bundled diff, secrets or debug code in the diff, or an unfired surface trigger, and an explicit rule against fabricated command output, review state, or test results. No permission-tier change in .claude/settings.json, no runtime code change, and no public exposure change.
