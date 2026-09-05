@@ -14,12 +14,32 @@ import { CATEGORY_CQL } from './cql';
 /** Public LexML URN resolver — used to build a canonical source link per hit. */
 const LEXML_URN_BASE = 'https://www.lexml.gov.br/urn/';
 
+/**
+ * Entity-expansion budget for upstream XML. LexML's Dublin Core records have no
+ * legitimate reason to declare custom DTD entities at all, so these sit far below
+ * the library defaults (1000 entities, 10 KB each, unbounded total expansions).
+ * Exceeding any of them throws, which `parseSruResponse` turns into the same
+ * `malformed_response` warning as any other structural surprise.
+ *
+ * Entity processing stays *enabled*: turning it off would leave `&amp;` and
+ * `&lt;` literal in document titles, silently corrupting legal text.
+ */
+const ENTITY_LIMITS = {
+	enabled: true,
+	maxEntityCount: 8,
+	maxEntitySize: 1024,
+	maxExpansionDepth: 4,
+	maxTotalExpansions: 1000,
+	maxExpandedLength: 65536
+};
+
 const parser = new XMLParser({
 	ignoreAttributes: true,
 	removeNSPrefix: true,
 	trimValues: true,
 	// Keep everything as strings: URNs, dates and counts must not be coerced.
-	parseTagValue: false
+	parseTagValue: false,
+	processEntities: ENTITY_LIMITS
 });
 
 type Unknown = unknown;

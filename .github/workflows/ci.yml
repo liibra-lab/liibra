@@ -22,11 +22,19 @@ jobs:
 
       - run: npm ci
 
-      # Audit at critical only. The current SvelteKit/wrangler toolchain pulls
-      # transitive dev-time advisories (cookie, esbuild) whose suggested fixes are
-      # nonsensical downgrades; none affect the Workers production build.
+      # Audit at moderate: the threshold is the *minimum* severity that fails the
+      # command, and the remotely-reachable advisories that matter here have been
+      # Moderate (e.g. the SvelteKit Accept-header ReDoS), so a `high` gate would
+      # let them through.
+      #
+      # One known finding sits below this line: GHSA-pxg6-pf52-xh8x (cookie, Low).
+      # SvelteKit pins `cookie: ^0.6.0`, so it is unfixable in range — `audit fix
+      # --force` "resolves" it by installing @sveltejs/kit@0.0.30, which breaks the
+      # Workers build. It is not reachable regardless: the advisory concerns cookie
+      # name/path/domain, and src/routes/lang/+server.ts writes a constant name,
+      # a constant path, and no domain. Revisit when SvelteKit bumps `cookie`.
       - name: Audit dependencies
-        run: npm audit --audit-level=critical
+        run: npm audit --audit-level=moderate
 
       # The next four steps are `npm run gate`, split up so a failure names
       # its step in the Actions UI.
