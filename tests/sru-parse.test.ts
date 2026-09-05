@@ -92,3 +92,64 @@ test('malformed and empty XML degrade gracefully with a warning', () => {
 		assert.ok(res.warnings?.includes('malformed_response'), `expected warning for: ${bad}`);
 	}
 });
+
+// --- Entity-expansion hardening (GHSA-8r6m-32jq-jx6q) -----------------------
+//
+// The next three tests pin two different things and must stay separate.
+//
+// The repeated-DOCTYPE test pins the fast-xml-parser *version floor*: on 5.10.0
+// this input parses successfully and exhibits the advisory — the second DOCTYPE
+// resets the entity table, so `&first;` is silently dropped and the document is
+// misread. Tightened entity limits do NOT protect against it; only >=5.10.1
+// does. Both declarations are deliberately minimal: an oversized-entity payload
+// would trip `maxEntitySize` before the parser ever reaches the second DOCTYPE,
+// so it would pass without proving anything about the upstream fix.
+//
+// The entity-count test pins the *configuration* instead: it parses fine under
+// library defaults on any version, and only rejects because ENTITY_LIMITS in
+// sru-parse.ts caps the count.
+
+test('repeated DOCTYPE declarations are refused, not silently re-read', () => {
+	const xml = `<!DOCTYPE srw:searchRetrieveResponse [<!ENTITY first "a">]>
+<!DOCTYPE srw:searchRetrieveResponse [<!ENTITY second "b">]>
+<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+  <srw:numberOfRecords>&first;&second;</srw:numberOfRecords>
+</srw:searchRetrieveResponse>`;
+	const res = parseSruResponse(xml, ctx);
+	assert.deepEqual(res.items, []);
+	assert.equal(res.total, 0);
+	assert.ok(res.warnings?.includes('malformed_response'));
+});
+
+test('an entity count above the configured budget is refused', () => {
+	const entities = Array.from({ length: 9 }, (_, i) => `<!ENTITY e${i} "v">`).join('');
+	const xml = `<!DOCTYPE srw:searchRetrieveResponse [${entities}]>
+<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+  <srw:numberOfRecords>0</srw:numberOfRecords>
+</srw:searchRetrieveResponse>`;
+	const res = parseSruResponse(xml, ctx);
+	assert.deepEqual(res.items, []);
+	assert.equal(res.total, 0);
+	assert.ok(res.warnings?.includes('malformed_response'));
+});
+
+// Guards the hardening against being "tightened" into `processEntities: false`,
+// which would leave these escapes literal and corrupt legal document titles.
+test('standard XML entities still decode in record fields', () => {
+	const xml = `<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+  <srw:numberOfRecords>1</srw:numberOfRecords>
+  <srw:records><srw:record><srw:recordData>
+    <srw_dc:dc xmlns:srw_dc="info:srw/schema/1/dc-schema"
+               xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <dc:identifier>urn:lex:br:federal:lei:2002-01-10;10406</dc:identifier>
+      <dc:title>Reforma &amp; Revisão &lt;anexo&gt;</dc:title>
+    </srw_dc:dc>
+  </srw:recordData></srw:record></srw:records>
+</srw:searchRetrieveResponse>`;
+	const { items } = parseSruResponse(xml, ctx);
+	assert.equal(items.length, 1);
+	assert.equal(items[0].title, 'Reforma & Revisão <anexo>');
+	// Named entities only. Numeric character references (`&#227;`) are gated by
+	// the `htmlEntities` option, which this parser leaves at its default `false`
+	// — unchanged by the entity budget above, and untested here on purpose.
+});

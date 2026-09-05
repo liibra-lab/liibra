@@ -70,6 +70,7 @@ surfaces:
     controls_verified:
       - liibra CI permissions: contents: read
       - Dependabot weekly npm and GitHub Actions updates
+      - CI dependency audit gate fails on Moderate severity and above
       - CODEOWNERS for governance/deployment/package/server paths
       - Private vulnerability reporting policy
     common_issues:
@@ -161,6 +162,8 @@ surfaces:
       - Page-size cap
       - Safe warnings/errors for upstream failures
       - Cache only ok responses
+      - Explicit XML entity-expansion budget on the SRU parser, below library defaults
+      - Entity-limit and repeated-DOCTYPE regression tests in tests/sru-parse.test.ts
     common_issues:
       - SSRF from arbitrary URL support
       - CQL injection
@@ -553,3 +556,5 @@ change_log:
     change: Added AS-014 coding-agent harness (Claude Code). Defined tiered agent permission boundary in .claude/settings.json (allow quality gate/local git/edits/claude-branch pushes and whitelisted upstream doc fetches; ask lockfile mutation, primary-source seed refresh, and main-branch writes; deny wrangler deploy/secret/login/delete, npm publish, .env/.dev.vars reads, and server-side GitHub writes that bypass the local gate). Owning document is docs/AGENT-TRUST.md. Control added: agent deny rails on deploy/secrets/publish. No public exposure change.
   - date: 2026-07-08
     change: AS-014 hardening — widened agent Read deny from .env to .env.* in .claude/settings.json (covers .env.local/.env.production variants; also blocks the secret-free .env.example/.env.test templates as accepted cost). Rationale updated in docs/AGENT-TRUST.md.
+  - date: 2026-09-05
+    change: Dependency advisory remediation and two control additions. AS-001 — CI dependency audit gate raised from critical to moderate, so a remotely reachable advisory now fails the build instead of passing silently; the threshold is the minimum severity that fails, and the one finding below it is documented inline in the workflow. AS-003 — the LexML SRU parser now sets an explicit entity-expansion budget below library defaults, with entity processing left enabled so standard entity decoding in legal titles is preserved; repeated-DOCTYPE and entity-count handling are pinned by regression tests. Runtime-reachable dependencies moved to patched floors in package.json; dev and build-tree advisories cleared in the lockfile within existing ranges, no forced major changes. Moves "XML parser abuse or entity-expansion hazards" from a known AS-003 risk to a verified control. No exposure, auth, hosting, or data-source change.

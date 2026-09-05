@@ -97,6 +97,7 @@ Use the status terms exactly:
 
 - `liibra` CI sets `permissions: contents: read`.
 - Dependabot is configured weekly for npm and GitHub Actions.
+- CI fails the build on any dependency advisory of Moderate severity or above.
 - CODEOWNERS protects `.github/`, workflows, `wrangler.jsonc`, package files, `src/hooks.server.ts`, and `src/lib/server/`.
 - `SECURITY.md` requests private reporting.
 
@@ -201,6 +202,8 @@ Use the status terms exactly:
 - Upstream failures become warnings or typed errors instead of raw exceptions to the page.
 - Câmara URL construction is centralized on a fixed base URL.
 - Only successful upstream responses are cached.
+- The SRU XML parser sets an explicit entity-expansion budget (count, size, depth, total expansions, expanded length) well below library defaults; a breach degrades to the standard malformed-response warning rather than an exception.
+- Entity-limit and repeated-DOCTYPE handling are pinned by unit tests, so a dependency downgrade or a config change that removed the budget would fail the gate.
 
 **Common issues / misconfigurations**
 
